@@ -175,7 +175,8 @@ function editSymbol(symbol) {
        var new_quantity = document.querySelector('input[name=new_quantity]').value;
        portfolio[symbol] = new_quantity;
        cell.innerHTML = new_quantity;
-       autoSave();
+        autoSave();
+        renderFolio(portfolio, prices);
     });
 }
 
