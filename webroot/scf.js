@@ -6,6 +6,22 @@ function test() {
     return true;
 }
 
+var MAPPING = {
+    'btc': 'bitcoin',
+    'eth': 'ethereum',
+    'xrp': 'ripple',
+    'ltc': 'litecoin',
+    'etc': 'ethereum-classic',
+    'dash': 'dash',
+    'nem': 'nem',
+    'miota': 'iota',
+    'xmr': 'monero',
+    'bts': 'bitshares',
+    'strat': 'stratis',
+    'eos': 'eos',
+    'zcash': 'zcash'
+};
+
 var prices = {
     'btc': [1.0, 2589.0],
     'eth': [0.11, 284.79]
@@ -15,6 +31,28 @@ var portfolio = {
     'btc': 1.200001,
     'eth': 0.005
 };
+
+function updatePrices() {
+    var url = 'https://api.coinmarketcap.com/v1/ticker/';
+    for (var symbol in portfolio) {
+        var url_id = MAPPING[symbol];
+        if (url_id) {
+            get(url + url_id, function() {
+                var response = JSON.parse(this.responseText);
+                var data = response[0];
+                prices[data.symbol.toLowerCase()] = [data.price_btc, data.price_usd];
+                console.log('updating price of ' + data.symbol.toLowerCase() + ' as ' + data.price_usd + '$');
+            });
+        }
+    }
+}
+
+function get(url, callback) {
+    var req = new XMLHttpRequest();
+    req.addEventListener("load", callback);
+    req.open("GET", url);
+    req.send();
+}
 
 function save(key, jsonData) {
     localStorage.setItem(key, JSON.stringify(jsonData));
@@ -100,6 +138,7 @@ function addActionHandlers() {
 function init() {
     if (test() === true) {
         renderFolio(portfolio, prices);
+        setInterval(updatePrices, 60000);
     }
 }
 
