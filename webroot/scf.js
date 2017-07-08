@@ -12,8 +12,9 @@ var prices = {
 };
 
 var portfolio = {
-    'btc': 1
-};;
+    'btc': 1.200001,
+    'eth': 0.005
+};
 
 function save(key, jsonData) {
     localStorage.setItem(key, JSON.stringify(jsonData));
@@ -31,6 +32,7 @@ function renderFolio(holdings, prices) {
         <th>Quantity</th>\
         <th>Unit price (USD)</th>\
         <th>Total (USD)</th>\
+        <th>Action</th>\
     </tr>\
     </thead>\
     <tbody>';
@@ -43,12 +45,56 @@ function renderFolio(holdings, prices) {
             <td>' + kQuantity + '</td>\
             <td>' + kPriceDollar + '</td>\
             <td>' + kQuantity * kPriceDollar+ '</td>\
+            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-eidt">Edit</button><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-remove">Remove</button></td>\
         </tr>';
     }
 
     html += '</tbody></table>';
 
     document.querySelector('.portfolio_table').innerHTML = html;
+}
+
+function editSymbol(symbol) {
+
+}
+
+function removeSymbol(symbol) {
+
+}
+
+function addSymbol(event) {
+    event.stopImmediatePropagation();
+    var form = document.querySelector('.add-symbol-form');
+    var symbol = form.querySelector('input[name=symbol]').value;
+    var quantity = form.querySelector('input[name=q]').value;
+
+    // check exists
+    if (portfolio[symbol]) {
+        var nq = portfolio[symbol] + quantity;
+        portfolio[symbol] = nq;
+    } else {
+        portfolio[symbol] = quantity;
+    }
+
+    renderFolio(portfolio, prices);
+
+    var snackbarContainer = document.querySelector('#demo-snackbar-example');
+
+    snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
+}
+
+function addActionHandlers() {
+    document.addEventListener('click', function(e) {
+        if (e.target.class == 'symbol-edit') {
+            editSymbol(e.target.dataset.symbol);
+        }
+        if (e.target.class == 'symbol-remove') {
+            removeSymbol(e.target.dataset.symbol);
+        }
+        if (e.target.class == 'symbol-add') {
+            addSymbol(e);
+        }
+    }, { passive: true, capture: true });
 }
 
 function init() {
