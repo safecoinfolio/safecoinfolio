@@ -40,7 +40,6 @@ var SECRET_KEY = 'foobar';
 
 var prices = {
     'btc': [1.0, 2589.0],
-    'eth': [0.11, 284.79]
 };
 
 var portfolio = {
