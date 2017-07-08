@@ -199,7 +199,7 @@ function addSymbol(event) {
 
     // check exists
     if (portfolio[symbol]) {
-        var nq = portfolio[symbol] + quantity;
+        var nq = parseFloat(portfolio[symbol]) + parseFloat(quantity);
         portfolio[symbol] = nq;
     } else {
         portfolio[symbol] = quantity;
