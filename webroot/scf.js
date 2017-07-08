@@ -222,6 +222,19 @@ function addActionHandlers() {
         if (e.target.classList.contains('symbol-remove')) {
             removeSymbol(e.target.dataset.symbol);
         }
+        if (e.target.classList.contains('change-user')) {
+            var dialog = document.querySelector('dialog');
+
+            if (! dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            showDialogButton.addEventListener('click', function() {
+                dialog.showModal();
+            });
+            dialog.querySelector('.close').addEventListener('click', function() {
+                dialog.close();
+            });
+        }
     }, { passive: true, capture: true });
 }
 

@@ -44,7 +44,7 @@
             </div>
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input class="mdl-textfield__input" type="text" id="q" name="q">
+              <input class="mdl-textfield__input" type="number" id="q" name="q">
               <label class="mdl-textfield__label" for="q">Quantity</label>
             </div>
 
@@ -52,7 +52,7 @@
           </form>
 
           <div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect change-user">
               CHANGE USER
             </button>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
@@ -115,6 +115,30 @@
   <div class="mdl-snackbar__text"></div>
   <button class="mdl-snackbar__action" type="button"></button>
 </div>
+
+<dialog class="mdl-dialog">
+  <h4 class="mdl-dialog__title">Change user</h4>
+  <div class="mdl-dialog__content">
+
+    <form class="add-symbol-form" action="#">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="username" name="username">
+        <label class="mdl-textfield__label" for="username">Username</label>
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="password" name="password">
+        <label class="mdl-textfield__label" for="password">Secret Password</label>
+      </div>
+
+    </form>
+
+  </div>
+  <div class="mdl-dialog__actions">
+    <button type="button" class="mdl-button">Change</button>
+    <button type="button" class="mdl-button close">Cancel</button>
+  </div>
+</dialog>
 
 <script src="scf.js"></script>
 </body>
