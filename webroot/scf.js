@@ -212,7 +212,7 @@ function addSymbol(event) {
     // snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
 }
 
-function addActionHandlers() {}
+function addActionHandlers() {
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('symbol-edit')) {
             editSymbol(e.target.dataset.symbol);
