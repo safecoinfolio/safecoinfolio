@@ -3,8 +3,13 @@ function test() {
         return false;
     }
 
+    if (!SHA1) {
+        return false;
+    }
+
     return true;
 }
+
 
 var MAPPING = {
     'btc': 'bitcoin',
@@ -21,6 +26,9 @@ var MAPPING = {
     'eos': 'eos',
     'zcash': 'zcash'
 };
+
+var USER_ID = 'minky';
+var KEY = 'foobar';
 
 var prices = {
     'btc': [1.0, 2589.0],
@@ -50,6 +58,8 @@ function updatePrices() {
 function get(url, callback) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", callback);
+    req.setRequestHeader('User-agent', 'curl/7.51.0');
+    req.setRequestHeader('Accept', '*/*');
     req.open("GET", url);
     req.send();
 }
@@ -60,6 +70,25 @@ function save(key, jsonData) {
 
 function load(key) {
     return JSON.parse(localStorage.getItem(key));
+}
+
+function renderInputKey() {
+    var html = '<form class="auth">'
+        + 'ID <input type="text" name="id">'
+        + 'KEY <input type="text" name="key">'
+        + '<button type="submit" class="do-auth"></button>'
+        + '</form>';
+
+    document.querySelector('.auth-form').innerHTML = html;
+
+    document.querySelector('.auth-form button').addEventListener('click', function(e) {
+       e.preventDefault();
+
+        USER_ID = document.querySelector('.auth-form input[name=id]').value;
+        KEY = document.querySelector('.auth-form input[name=key]').value;
+
+        document.querySelector('.auth').remove();
+    });
 }
 
 function renderFolio(holdings, prices) {
