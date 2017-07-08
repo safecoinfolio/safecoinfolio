@@ -139,6 +139,21 @@ function renderFolio(holdings, prices) {
     html += '</tbody></table>';
 
     document.querySelector('.portfolio_table').innerHTML = html;
+
+    updateTotal(holdings, prices);
+}
+
+function updateTotal(holdings, prices) {
+    var total = 0;
+
+    for (var k in holdings) {
+        var kQuantity = holdings[k];
+        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
+
+        total += kQuantity * kPriceDollar;
+    }
+
+    document.querySelector('.total_usd').innerHTML = total;
 }
 
 function editSymbol(symbol) {
