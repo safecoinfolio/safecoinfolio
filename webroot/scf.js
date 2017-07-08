@@ -10,7 +10,7 @@ function test() {
     return true;
 }
 
-var verify = 'FOO_BAR_123';
+var verify = {'id': 'FOO_BAR_123'};
 
 var MAPPING = {
     'btc': 'bitcoin',
@@ -254,7 +254,20 @@ function addActionHandlers() {
     dialog.querySelector('.do-change').addEventListener('click', function() {
         USER_ID = document.querySelector('input[name=username]').value;
         SECRET_KEY = document.querySelector('input[name=password]').value;
+        if (load('verify') !== null) {
+            try {
+                var o = load('verify');
+                if (o.id !== verify.id) {
+                    alert('wrong password');
+                    return;
+                }
+            } catch (e) {
+                alert('wrong password');
+                return;
+            }
+        }
         init();
+        save('verify', verify);
         dialog.close();
     });
 
