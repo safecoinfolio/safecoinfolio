@@ -45,8 +45,7 @@ function updatePriceFor(symbol) {
         get(url + url_id + '/', function () {
             var response = JSON.parse(this.responseText);
             var data = response[0];
-            prices[data.symbol.toLowerCase()] = [data.price_btc,
-                data.price_usd];
+            prices[data.symbol.toLowerCase()] = [data.price_btc, data.price_usd];
             console.log(
                 'updating price of ' + data.symbol.toLowerCase() + ' as '
                 + data.price_usd + '$');
@@ -120,7 +119,7 @@ function renderFolio(holdings, prices) {
 
     for (var k in holdings) {
         var kQuantity = holdings[k];
-        var kPriceDollar = prices[k][1];
+        var kPriceDollar = prices[k].length > 1 ? prices[k][1] : 0;
         html += '<tr>\
             <td class="mdl-data-table__cell--non-numeric">' + k + '</td>\
             <td>' + kQuantity + '</td>\
