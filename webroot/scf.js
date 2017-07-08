@@ -172,6 +172,7 @@ function removeSymbol(symbol) {
 
 function autoSave() {
     save('portfolio', portfolio);
+    save('prices', prices);
 }
 
 function addSymbol(event) {
@@ -213,6 +214,10 @@ function init() {
     if (test() === true) {
         if (load('portfolio') !== null) {
             portfolio = load('portfolio');
+        }
+
+        if (load('prices') !== null) {
+            prices = load('prices');
         }
 
         document.querySelector('.symbol-add').addEventListener('click', function(e) {
