@@ -39,7 +39,7 @@ var USER_ID = 'minky';
 var SECRET_KEY = 'foobar';
 
 var prices = {
-    'btc': [1.0, 2589.0],
+    'btc': [1.0, 2589.0]
 };
 
 var portfolio = {
@@ -162,7 +162,12 @@ function updateTotal(holdings, prices) {
 }
 
 function editSymbol(symbol) {
-    var cell = document.querySelector(symbol + '_quantity');
+    var cell = document.querySelector('.' + symbol + '_quantity');
+
+    if (typeof cell === "undefined") {
+        return;
+    }
+
     var html = '<form><input type="number" name="new_quantity" value="' + portfolio[symbol] + '"><button class="symbol-update-q">update</button></form>';
     cell.innerHTML = html;
     document.querySelector('.symbol-update-q').addEventListener('click', function(e) {
@@ -203,12 +208,11 @@ function addSymbol(event) {
 
     renderFolio(portfolio, prices);
 
-    var snackbarContainer = document.querySelector('#demo-snackbar-example');
-
-    snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
+    // var snackbarContainer = document.querySelector('#demo-snackbar-example');
+    // snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
 }
 
-function addActionHandlers() {
+function addActionHandlers() {}
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('symbol-edit')) {
             editSymbol(e.target.dataset.symbol);
