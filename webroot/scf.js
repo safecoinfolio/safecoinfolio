@@ -134,10 +134,10 @@ function renderFolio(holdings, prices) {
         var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
         html += '<tr>\
             <td class="mdl-data-table__cell--non-numeric">' + k + '</td>\
-            <td>' + kQuantity + '</td>\
+            <td class="' + k + '_quantity">' + kQuantity + '</td>\
             <td>' + kPriceDollar + '</td>\
             <td>' + kQuantity * kPriceDollar+ '</td>\
-            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-eidt">Edit</button><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-remove">Remove</button></td>\
+            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-edit">Edit</button><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-remove">Remove</button></td>\
         </tr>';
     }
 
@@ -162,11 +162,21 @@ function updateTotal(holdings, prices) {
 }
 
 function editSymbol(symbol) {
-
+    var cell = document.querySelector(symbol + '_quantity');
+    var html = '<form><input type="number" name="new_quantity" value="' + portfolio[symbol] + '"><button class="symbol-update-q">update</button></form>';
+    cell.innerHTML = html;
+    document.querySelector('.symbol-update-q').addEventListener('click', function(e) {
+       e.preventDefault();
+       var new_quantity = document.querySelector('input[name=new_quantity]').value;
+       portfolio[symbol] = new_quantity;
+       cell.innerHTML = new_quantity;
+       autoSave();
+    });
 }
 
 function removeSymbol(symbol) {
     portfolio[symbol] = 0;
+    autoSave();
 }
 
 function autoSave() {
