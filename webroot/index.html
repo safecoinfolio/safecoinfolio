@@ -42,8 +42,18 @@
     <div class="page-content">
 
       <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--4-col">4</div>
-        <div class="mdl-cell mdl-cell--4-col">4</div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <h2>Your portfolio</h2>
+          <div class="portfolio_table"></div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          Add coin<br>
+          <form>
+            Symbol <input type="text" name="symbol">
+            Number of coins <input type="number" name="q">
+            <button type="submit">Add</button>
+          </form>
+        </div>
         <div class="mdl-cell mdl-cell--4-col">4</div>
       </div>
 
@@ -51,5 +61,6 @@
   </main>
 </div>
 
+<script src="scf.js"></script>
 </body>
 </html>
