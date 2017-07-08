@@ -66,6 +66,7 @@ function updatePrices() {
     for (var symbol in portfolio) {
         updatePriceFor(symbol);
     }
+
 }
 
 function get(url, callback) {
@@ -213,9 +214,11 @@ function init() {
             addSymbol(e);
         });
 
+        updatePrices();
         renderFolio(portfolio, prices);
-        setInterval(updatePrices, 60000);
+        setInterval(updatePrices, 30000);
         setInterval(autoSave, 10000);
+        setInterval(function() { renderFolio(portfolio, prices) }, 35000);
     } else {
         alert('Service not available');
     }
