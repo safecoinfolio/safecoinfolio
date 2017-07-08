@@ -137,7 +137,7 @@ function renderFolio(holdings, prices) {
             <td class="' + k + '_quantity">' + kQuantity + '</td>\
             <td>' + kPriceDollar + '</td>\
             <td>' + kQuantity * kPriceDollar+ '</td>\
-            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-edit">Edit</button><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-js-ripple-effect symbol-remove">Remove</button></td>\
+            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored symbol-edit">Edit</button><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored symbol-remove">Remove</button></td>\
         </tr>';
     }
 
