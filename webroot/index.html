@@ -36,20 +36,23 @@
           <div class="portfolio_table"></div>
         </div>
         <div class="mdl-cell mdl-cell--4-col">
-          Add coin<br>
-          <form class="add-symbol-form" action="#">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
-              <label class="mdl-textfield__label" for="symbol">Symbol (BTC, DASH, ETH, ...)</label>
-            </div>
 
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input class="mdl-textfield__input" type="number" id="q" name="q">
-              <label class="mdl-textfield__label" for="q">Quantity</label>
-            </div>
+          <div class="mdl-card mdl-shadow--2dp">
+          <h2>Add coin</h2>
+            <form class="add-symbol-form" action="#">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
+                <label class="mdl-textfield__label" for="symbol">Symbol (BTC, DASH, ETH, ...)</label>
+              </div>
 
-            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-add">Add</button>
-          </form>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="number" id="q" name="q">
+                <label class="mdl-textfield__label" for="q">Quantity</label>
+              </div>
+
+              <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-add">Add</button>
+            </form>
+          </div>
 
           <div>
             <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised change-user">
