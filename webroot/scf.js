@@ -224,6 +224,7 @@ function init() {
         });
 
         updatePrices();
+        addActionHandlers();
         renderFolio(portfolio, prices);
         setInterval(updatePrices, 30000);
         setInterval(autoSave, 10000);
