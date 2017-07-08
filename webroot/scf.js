@@ -24,7 +24,15 @@ var MAPPING = {
     'bts': 'bitshares',
     'strat': 'stratis',
     'eos': 'eos',
-    'zcash': 'zcash'
+    'zec': 'zcash',
+    'bcc': 'bitconnect',
+    'waves': 'waves',
+    'steem': 'steem',
+    'ans': 'antshares',
+    'gno': 'gnosis-gno',
+    'gnt': 'golem-network-tokens',
+    'bcn': 'bytecoin-bcn',
+    'doge': 'dogecoin'
 };
 
 var USER_ID = 'minky';
@@ -64,7 +72,6 @@ function get(url, callback) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", callback);
     req.open("GET", url);
-    req.setRequestHeader('User-agent', 'curl/7.51.0');
     req.setRequestHeader('Accept', '*/*');
     req.send();
 }
