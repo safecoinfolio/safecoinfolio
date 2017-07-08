@@ -201,10 +201,10 @@ function addSymbol(event) {
 
 function addActionHandlers() {
     document.addEventListener('click', function(e) {
-        if (e.target.class == 'symbol-edit') {
+        if (e.target.classList.contains('symbol-edit')) {
             editSymbol(e.target.dataset.symbol);
         }
-        if (e.target.class == 'symbol-remove') {
+        if (e.target.classList.contains('symbol-remove')) {
             removeSymbol(e.target.dataset.symbol);
         }
     }, { passive: true, capture: true });
