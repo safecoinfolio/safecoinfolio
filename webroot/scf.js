@@ -148,7 +148,7 @@ function autoSave() {
 }
 
 function addSymbol(event) {
-    event.stopImmediatePropagation();
+    event.preventDefault();
     var form = document.querySelector('.add-symbol-form');
     var symbol = form.querySelector('input[name=symbol]').value;
     var quantity = form.querySelector('input[name=q]').value;
@@ -163,7 +163,7 @@ function addSymbol(event) {
 
     updatePriceFor(symbol);
     autoSave();
-    
+
     renderFolio(portfolio, prices);
 
     var snackbarContainer = document.querySelector('#demo-snackbar-example');
@@ -179,9 +179,6 @@ function addActionHandlers() {
         if (e.target.class == 'symbol-remove') {
             removeSymbol(e.target.dataset.symbol);
         }
-        if (e.target.class == 'symbol-add') {
-            addSymbol(e);
-        }
     }, { passive: true, capture: true });
 }
 
@@ -190,6 +187,10 @@ function init() {
         if (load('portfolio') !== null) {
             portfolio = load('portfolio');
         }
+
+        document.querySelector('.symbol-add').addEventListener('click', function(e) {
+            addSymbol(e);
+        });
 
         renderFolio(portfolio, prices);
         setInterval(updatePrices, 60000);
