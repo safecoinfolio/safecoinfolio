@@ -267,7 +267,7 @@ function setClock() {
     if (clockInited) {
         return;
     }
-    
+
     setInterval(updatePrices, 30000);
     setInterval(autoSave, 10000);
     setInterval(function() { renderFolio(portfolio, prices) }, 35000);
@@ -279,6 +279,11 @@ function init() {
         var dialog = document.querySelector('dialog');
         if (! dialog.showModal) {
             dialogPolyfill.registerDialog(dialog);
+        }
+
+        if (USER_ID === 'minky') {
+            dialog.showModal();
+            return;
         }
 
         if (load('portfolio') !== null) {
