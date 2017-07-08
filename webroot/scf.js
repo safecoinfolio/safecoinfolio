@@ -58,9 +58,9 @@ function updatePrices() {
 function get(url, callback) {
     var req = new XMLHttpRequest();
     req.addEventListener("load", callback);
+    req.open("GET", url);
     req.setRequestHeader('User-agent', 'curl/7.51.0');
     req.setRequestHeader('Accept', '*/*');
-    req.open("GET", url);
     req.send();
 }
 
