@@ -28,7 +28,7 @@ var MAPPING = {
 };
 
 var USER_ID = 'minky';
-var KEY = 'foobar';
+var SECRET_KEY = 'foobar';
 
 var prices = {
     'btc': [1.0, 2589.0],
@@ -36,22 +36,28 @@ var prices = {
 };
 
 var portfolio = {
-    'btc': 1.200001,
-    'eth': 0.005
 };
 
-function updatePrices() {
+function updatePriceFor(symbol) {
     var url = 'https://api.coinmarketcap.com/v1/ticker/';
+    var url_id = MAPPING[symbol];
+    if (url_id) {
+        get(url + url_id + '/', function () {
+            var response = JSON.parse(this.responseText);
+            var data = response[0];
+            prices[data.symbol.toLowerCase()] = [data.price_btc,
+                data.price_usd];
+            console.log(
+                'updating price of ' + data.symbol.toLowerCase() + ' as '
+                + data.price_usd + '$');
+        });
+    }
+}
+
+function updatePrices() {
+
     for (var symbol in portfolio) {
-        var url_id = MAPPING[symbol];
-        if (url_id) {
-            get(url + url_id, function() {
-                var response = JSON.parse(this.responseText);
-                var data = response[0];
-                prices[data.symbol.toLowerCase()] = [data.price_btc, data.price_usd];
-                console.log('updating price of ' + data.symbol.toLowerCase() + ' as ' + data.price_usd + '$');
-            });
-        }
+        updatePriceFor(symbol);
     }
 }
 
@@ -65,11 +71,19 @@ function get(url, callback) {
 }
 
 function save(key, jsonData) {
-    localStorage.setItem(key, JSON.stringify(jsonData));
+    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(jsonData), SECRET_KEY);
+    localStorage.setItem(USER_ID + '_' + key, ciphertext);
 }
 
 function load(key) {
-    return JSON.parse(localStorage.getItem(key));
+    var data = localStorage.getItem(USER_ID + '_' + key);
+
+    if (data === null) {
+        return null;
+    }
+
+    var bytes  = CryptoJS.AES.decrypt(data, SECRET_KEY);
+    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 }
 
 function renderInputKey() {
@@ -85,7 +99,7 @@ function renderInputKey() {
        e.preventDefault();
 
         USER_ID = document.querySelector('.auth-form input[name=id]').value;
-        KEY = document.querySelector('.auth-form input[name=key]').value;
+        SECRET_KEY = document.querySelector('.auth-form input[name=key]').value;
 
         document.querySelector('.auth').remove();
     });
@@ -129,6 +143,10 @@ function removeSymbol(symbol) {
 
 }
 
+function autoSave() {
+    save('portfolio', portfolio);
+}
+
 function addSymbol(event) {
     event.stopImmediatePropagation();
     var form = document.querySelector('.add-symbol-form');
@@ -143,6 +161,9 @@ function addSymbol(event) {
         portfolio[symbol] = quantity;
     }
 
+    updatePriceFor(symbol);
+    autoSave();
+    
     renderFolio(portfolio, prices);
 
     var snackbarContainer = document.querySelector('#demo-snackbar-example');
@@ -166,8 +187,13 @@ function addActionHandlers() {
 
 function init() {
     if (test() === true) {
+        if (load('portfolio') !== null) {
+            portfolio = load('portfolio');
+        }
+
         renderFolio(portfolio, prices);
         setInterval(updatePrices, 60000);
+        setInterval(autoSave, 10000);
     } else {
         alert('Service not available');
     }
