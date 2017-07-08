@@ -10,6 +10,7 @@ function test() {
     return true;
 }
 
+var verify = 'FOO_BAR_123';
 
 var MAPPING = {
     'btc': 'bitcoin',
@@ -191,6 +192,14 @@ function autoSave() {
     save('prices', prices);
 }
 
+function checkPassword() {
+    if (load('check') === verify) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function addSymbol(event) {
     event.preventDefault();
     var form = document.querySelector('.add-symbol-form');
@@ -214,7 +223,15 @@ function addSymbol(event) {
     // snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
 }
 
+var actionHandlersInited = false;
+
 function addActionHandlers() {
+    if (actionHandlersInited) {
+        return;
+    }
+
+    var dialog = document.querySelector('dialog');
+
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('symbol-edit')) {
             editSymbol(e.target.dataset.symbol);
@@ -223,41 +240,61 @@ function addActionHandlers() {
             removeSymbol(e.target.dataset.symbol);
         }
         if (e.target.classList.contains('change-user')) {
-            var dialog = document.querySelector('dialog');
-
-            if (! dialog.showModal) {
-                dialogPolyfill.registerDialog(dialog);
-            }
-
             dialog.showModal();
         }
     }, { passive: true, capture: true });
 
-    document.querySelector('dialog').querySelector('.close').addEventListener('click', function() {
+    document.querySelector('.symbol-add').addEventListener('click', function(e) {
+        addSymbol(e);
+    });
+
+    dialog.querySelector('.close').addEventListener('click', function() {
         dialog.close();
     });
+    dialog.querySelector('.do-change').addEventListener('click', function() {
+        USER_ID = document.querySelector('input[name=username]').value;
+        SECRET_KEY = document.querySelector('input[name=password]').value;
+        init();
+        dialog.close();
+    });
+
+    actionHandlersInited = true;
+}
+
+var clockInited = false;
+
+function setClock() {
+    if (clockInited) {
+        return;
+    }
+    
+    setInterval(updatePrices, 30000);
+    setInterval(autoSave, 10000);
+    setInterval(function() { renderFolio(portfolio, prices) }, 35000);
+    clockInited = true;
 }
 
 function init() {
     if (test() === true) {
+        var dialog = document.querySelector('dialog');
+        if (! dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+
         if (load('portfolio') !== null) {
             portfolio = load('portfolio');
+        } else {
+            portfolio = {};
         }
 
         if (load('prices') !== null) {
             prices = load('prices');
         }
 
-        document.querySelector('.symbol-add').addEventListener('click', function(e) {
-            addSymbol(e);
-        });
-
         updatePrices();
         addActionHandlers();
         renderFolio(portfolio, prices);
-        setInterval(updatePrices, 30000);
-        setInterval(autoSave, 10000);
-        setInterval(function() { renderFolio(portfolio, prices) }, 35000);
+        setClock();
     } else {
         alert('Service not available');
     }
