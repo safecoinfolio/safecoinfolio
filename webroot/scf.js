@@ -127,6 +127,11 @@ function renderFolio(holdings, prices) {
 
     for (var k in holdings) {
         var kQuantity = holdings[k];
+
+        if (kQuantity === 0) {
+            continue;
+        }
+
         var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
         html += '<tr>\
             <td class="mdl-data-table__cell--non-numeric">' + k + '</td>\
@@ -162,7 +167,7 @@ function editSymbol(symbol) {
 }
 
 function removeSymbol(symbol) {
-
+    portfolio[symbol] = 0;
 }
 
 function autoSave() {
