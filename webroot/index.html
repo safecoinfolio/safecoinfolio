@@ -32,17 +32,25 @@
         <div class="mdl-cell mdl-cell--4-col">
           Add coin<br>
           <form class="add-symbol-form" action="#">
-            Symbol <input type="text" name="symbol">
-            Number of coins <input type="number" name="q">
-            <button type="submit" class="symbol-add">Add</button>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
+              <label class="mdl-textfield__label" for="symbol">Symbol (BTC, DASH, ETH, ...)</label>
+            </div>
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="q" name="q">
+              <label class="mdl-textfield__label" for="q">Quantity</label>
+            </div>
+
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-add">Add</button>
           </form>
 
           <div>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-              AUTH
+              CHANGE USER
             </button>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-              BACKUP
+              BACKUP CURRENT USER
             </button>
             <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
             <!--RESTORE-->
@@ -51,6 +59,7 @@
 
           <div>
             <h2>How this works</h2>
+            <p>All your data are stored encrypted using `CryptoJS.AES` algorithm on your device. This page only makes HTTPS requests to the pricing API. This means that no one can even read which prices are being transferred, although the API provider (3rd party) may log which coin prices you request.</p>
           </div>
 
           <div>
