@@ -1,9 +1,9 @@
 function test() {
-    if (!localStorage) {
+    if (typeof localStorage === "undefined") {
         return false;
     }
 
-    if (!SHA1) {
+    if (typeof CryptoJS.SHA1 === "undefined") {
         return false;
     }
 
@@ -168,6 +168,8 @@ function init() {
     if (test() === true) {
         renderFolio(portfolio, prices);
         setInterval(updatePrices, 60000);
+    } else {
+        alert('Service not available');
     }
 }
 
