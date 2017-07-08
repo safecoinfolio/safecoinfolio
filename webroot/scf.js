@@ -281,11 +281,6 @@ function init() {
             dialogPolyfill.registerDialog(dialog);
         }
 
-        if (USER_ID === 'minky') {
-            dialog.showModal();
-            return;
-        }
-
         if (load('portfolio') !== null) {
             portfolio = load('portfolio');
         } else {
@@ -300,6 +295,11 @@ function init() {
         addActionHandlers();
         renderFolio(portfolio, prices);
         setClock();
+
+        if (USER_ID === 'minky') {
+            dialog.showModal();
+            return;
+        }
     } else {
         alert('Service not available');
     }
