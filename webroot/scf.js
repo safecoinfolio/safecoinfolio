@@ -183,6 +183,7 @@ function editSymbol(symbol) {
 function removeSymbol(symbol) {
     portfolio[symbol] = 0;
     autoSave();
+    renderFolio(portfolio, prices);
 }
 
 function autoSave() {
