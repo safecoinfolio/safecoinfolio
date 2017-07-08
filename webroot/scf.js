@@ -119,7 +119,7 @@ function renderFolio(holdings, prices) {
 
     for (var k in holdings) {
         var kQuantity = holdings[k];
-        var kPriceDollar = prices[k].length > 1 ? prices[k][1] : 0;
+        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
         html += '<tr>\
             <td class="mdl-data-table__cell--non-numeric">' + k + '</td>\
             <td>' + kQuantity + '</td>\
