@@ -78,6 +78,10 @@ function get(url, callback) {
 }
 
 function save(key, jsonData) {
+    if (USER_ID === 'minky') {
+        return;
+    }
+
     var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(jsonData), SECRET_KEY);
     localStorage.setItem(USER_ID + '_' + key, ciphertext);
 }
