@@ -156,7 +156,7 @@ function updatePriceFor(symbol) {
 function updatePrices() {
 
     for (var symbol in portfolio) {
-        updatePriceFor(symbol);
+        updatePriceFor(symbol.toLowerCase());
     }
 
 }
