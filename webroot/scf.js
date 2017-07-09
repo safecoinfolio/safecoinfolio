@@ -120,12 +120,25 @@ var MAPPING = {
     'swt': 'swarm-city',
     'adt': 'adtoken',
     'agrs': 'agoras-tokens',
+    'cfi': 'cofound-it',
     'nav': 'nav-coin',
     'uny': 'unity-ingot',
     'vtc': 'vertcoin',
     'enrg': 'energycoin',
     'sls': 'salus',
-    'moon': 'mooncoin'
+    'moon': 'mooncoin',
+    'mco': 'monaco',
+    'ptoy': 'patientory',
+    'xbc': 'bitcoin-plus',
+    'ion': 'ion',
+    'wct': 'waves-community-token',
+    'zrc': 'zrcoin',
+    'sphr': 'sphere',
+    'lun': 'lunyr',
+    'brx': 'breakout-stake',
+    'kore': 'korecoin',
+    'nsr': 'nushares',
+    'plbt': 'polybius'
 };
 
 var USER_ID = 'minky';
