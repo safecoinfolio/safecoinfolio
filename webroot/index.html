@@ -59,64 +59,73 @@
     <div class="page-content">
 
       <div class="mdl-grid">
+        <div class="mdl-layout-spacer"></div>
         <div class="mdl-cell mdl-cell--8-col">
+
           <div class="auth-form"></div>
 
-          <h2>Your safecoin portfolio -- always your data, encrypted and on your device</h2>
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col">
+              <h2>Your safecoin portfolio -- always your data, encrypted and on your device</h2>
 
-          <div>Total <span class="total_usd">-</span> USD</div>
+              <div>Total <span class="total_usd">-</span> USD</div>
 
-          <div><em>prices updated every 30 seconds</em></div>
+              <div><em>prices updated every 30 seconds</em></div>
 
-          <div class="portfolio_table"></div>
+              <div class="portfolio_table"></div>
+            </div>
+
+            <div class="mdl-cell mdl-cell--4-col">
+
+              <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title mdl-card--expand" style="background-color: #a8e8ed;">
+                  <h2 class="mdl-card__title-text">Add coin</h2>
+                </div>
+
+                <div class="mdl-card__supporting-text">
+                  <form class="add-symbol-form" action="#">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
+                      <label class="mdl-textfield__label" for="symbol">Symbol (BTC, DASH, ETH, ...)</label>
+                    </div>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="number" id="q" name="q">
+                      <label class="mdl-textfield__label" for="q">Quantity</label>
+                    </div>
+                  </form>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-add">Add</button>
+                </div>
+              </div>
+
+              <div class="demo-card-square mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title mdl-card--expand" style="background-color: #a8e8ed;">
+                  <h2 class="mdl-card__title-text">Change user</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  Remeber your username and password. They cannot be recovered. Without the correct combination
+                  of username and password the portfolio cannot be retrieved and will be lost.
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised change-user">
+                    CHANGE USER
+                  </button>
+                </div>
+              </div>
+
+              <div class="demo-card-square mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__supporting-text">
+                  <h2>How this works</h2>
+                  <p>All your data are stored locally and the portfolio information is encrypted using `CryptoJS.AES` algorithm (<a href="https://www.google.com.sg/webhp?#safe=on&q=is+aes-256+secure" rel="nofollow" target="_blank">AES-256</a>) on your device. This page only makes HTTPS requests to the pricing API. This means that no one can even read which prices are being transferred, although the API provider (3rd party) may log which coin prices you request. The only unencrypted information is your username but your username also never leaves this device.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
-        <div class="mdl-cell mdl-cell--4-col">
-
-          <div class="mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title mdl-card--expand" style="background-color: #a8e8ed;">
-              <h2 class="mdl-card__title-text">Add coin</h2>
-            </div>
-
-            <div class="mdl-card__supporting-text">
-                <form class="add-symbol-form" action="#">
-                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
-                    <label class="mdl-textfield__label" for="symbol">Symbol (BTC, DASH, ETH, ...)</label>
-                  </div>
-
-                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="number" id="q" name="q">
-                    <label class="mdl-textfield__label" for="q">Quantity</label>
-                  </div>
-                </form>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-              <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-add">Add</button>
-            </div>
-          </div>
-
-          <div class="demo-card-square mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title mdl-card--expand" style="background-color: #a8e8ed;">
-              <h2 class="mdl-card__title-text">Change user</h2>
-            </div>
-            <div class="mdl-card__supporting-text">
-              Remeber your username and password. They cannot be recovered. Without the correct combination
-              of username and password the portfolio cannot be retrieved and will be lost.
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-              <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised change-user">
-                CHANGE USER
-              </button>
-            </div>
-          </div>
-
-          <div class="demo-card-square mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__supporting-text">
-            <h2>How this works</h2>
-            <p>All your data are stored locally and the portfolio information is encrypted using `CryptoJS.AES` algorithm (<a href="https://www.google.com.sg/webhp?#safe=on&q=is+aes-256+secure" rel="nofollow" target="_blank">AES-256</a>) on your device. This page only makes HTTPS requests to the pricing API. This means that no one can even read which prices are being transferred, although the API provider (3rd party) may log which coin prices you request. The only unencrypted information is your username but your username also never leaves this device.</p>
-          </div>
-          </div>
-        </div>
+        <div class="mdl-layout-spacer"></div>
       </div>
 
 
