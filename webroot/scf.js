@@ -77,7 +77,7 @@ var MAPPING = {
     'round': 'round',
     'rdd': 'reddcoin',
     'xas': 'asch',
-    'ncm': 'namecoin',
+    'nmc': 'namecoin',
     'mona': 'monacoin',
     'mln': 'melon',
     'dbix': 'dubaicoin-dbix',
