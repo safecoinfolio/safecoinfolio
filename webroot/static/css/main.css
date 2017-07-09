@@ -1,0 +1,43 @@
+.mdl-layout .mdl-mega-footer__drop-down-section {
+  width: 40%;
+}
+.mdl-layout .mdl-card {
+  margin: 15px 0;
+}
+.mdl-layout h1 {
+  font-size: 165%;
+  line-height: 1.3em;
+}
+.mdl-layout h2 {
+  font-size: 130%;
+}
+.mdl-layout .portfolio_table table {
+  width: 100%;
+}
+.mdl-layout .mdl-layout__header {
+  background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+}
+h1.page-header {
+  color: white;
+  font-weight:800;
+  background: url(/static/images/safecoinfolio_logo_128.png) left center;
+  -webkit-background-size: 48px;
+  background-size: 48px;
+  background-repeat: no-repeat;
+  padding: 8px 0 0 60px;
+  min-height: 48px;
+}
+
+@media (max-width: 1400px) {
+  .inner-grid .mdl-cell.mdl-cell--8-col {
+    width: 100%;
+  }
+}
+
+@media (min-width: 840px) {
+
+  .container.mdl-cell--8-col {
+    width: calc(90.666667% - 16px);
+  }
+
+}

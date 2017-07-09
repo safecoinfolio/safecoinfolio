@@ -33,7 +33,43 @@ var MAPPING = {
     'gno': 'gnosis-gno',
     'gnt': 'golem-network-tokens',
     'bcn': 'bytecoin-bcn',
-    'doge': 'dogecoin'
+    'doge': 'dogecoin',
+    'icn': 'iconomi',
+    'sc': 'siacoin',
+    'rep': 'augur',
+    'veri': 'veritaseum',
+    'lsk': 'lisk',
+    'usdt': 'tether',
+    'xlm': 'stellar',
+    'gbyte': 'byteball',
+    'maid': 'maidsafecoin',
+    'fct': 'factom',
+    'dcr': 'decred',
+    'game': 'gamecredits',
+    'snt': 'status',
+    'ardr': 'ardor',
+    'kmd': 'komodo',
+    'dgb': 'digibyte',
+    'pivx': 'pivx',
+    'mcap': 'mcap',
+    'dgd': 'digixdao',
+    'pay': 'tenx',
+    'nxt': 'nxt',
+    'bat': 'basic-attention-token',
+    'bnt': 'bancor',
+    'sngls': 'singulardtv',
+    'btcd': 'bitcoindark',
+    'ant': 'aragon',
+    'mgo': 'mobilego',
+    'sys': 'syscoin',
+    '1st': 'fistblood',
+    'ark': 'ark',
+    'ppc': 'peercoin',
+    'edg': 'edgeless',
+    'fun': 'funfair',
+    'emc': 'emercoin',
+    'lkk': 'lykke',
+    'leo': 'leocoin'
 };
 
 var USER_ID = 'minky';
@@ -323,4 +359,3 @@ function init() {
 }
 
 init();
-
