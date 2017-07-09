@@ -3,7 +3,7 @@ function test() {
         return false;
     }
 
-    if (typeof CryptoJS.SHA1 === "undefined") {
+    if (typeof CryptoJS.AES === "undefined") {
         return false;
     }
 
