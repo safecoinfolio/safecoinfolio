@@ -43,6 +43,8 @@
   </main>
 </div>
 
+<dialog></dialog>
+
 <script src="scf.js"></script>
 <script>
 
@@ -52,7 +54,7 @@ function fc(str) {
 
 var html = '';
 for (var symbol in MAPPING) {
-  var html += '<tr>\
+  html += '<tr>\
     <td class="mdl-data-table__cell--non-numeric">' + symbol.toUpperCase() + '</td>\
     <td class="mdl-data-table__cell--non-numeric">' + fc(MAPPING[symbol]) + '</td>\
   </tr>';
