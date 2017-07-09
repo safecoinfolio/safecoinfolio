@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+
+  <script defer src="/static/js/material.min.js"></script>
+  <script src="/static/js/crypto-js.min.js"></script>
+
+  <title>SafeCoinFolio - private and safe cryptocurrency portfolio in your browser</title>
+</head>
+<body>
+
+<div class="mdl-layout mdl-js-layout">
+
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title"><h1 class="page-header">SafeCoinFolio</h1></span>
+    </div>
+  </header>
+
+  <main class="mdl-layout__content">
+    <div class="page-content">
+
+      <div class="mdl-grid">
+        <div class="mdl-layout-spacer"></div>
+        <div class="mdl-cell mdl-cell--8-col container">
+
+
+          <div>
+            <a href="/" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Go back</a> to your portfolio
+          </div>
+
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Name</th>
+              <th class="mdl-data-table__cell--non-numeric">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Link BTC address</td>
+                <td class="mdl-data-table__cell--non-numeric">Read balance of a BTC wallet</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Link ETH address</td>
+                <td class="mdl-data-table__cell--non-numeric">Read balance and tokens from a ETH wallet</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Anonymous Price API proxy</td>
+                <td class="mdl-data-table__cell--non-numeric">Instead of connecting to the price API directly, an anonymous relayer will fetch the price information for the client.</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Add multiple line-items per currency</td>
+                <td class="mdl-data-table__cell--non-numeric">Instead of having just one aggregate quantity for each coin, this feature will make it possible for a fine-grain tracking</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Add purchase price for each line-item</td>
+                <td class="mdl-data-table__cell--non-numeric">This will make calculating profit/loss possible</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Add checkpointing for the portfolio value</td>
+                <td class="mdl-data-table__cell--non-numeric">This will make it possible to track the progress of the wealth creation along a timeline</td>
+              </tr>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">Backup the portfolio into an encrypted file</td>
+                <td class="mdl-data-table__cell--non-numeric">Download the portfolio into a filesystem and add the ability to restore the portfolio from a file backup</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="mdl-layout-spacer"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<dialog></dialog>
+
+<script src="scf.js"></script>
+</body>
+</html>
