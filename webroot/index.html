@@ -43,6 +43,12 @@
       min-height: 48px;
     }
 
+    @media (max-width: 1400px) {
+      .inner-grid .mdl-cell.mdl-cell--8-col {
+        width: 100%;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -64,8 +70,8 @@
 
           <div class="auth-form"></div>
 
-          <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-grid inner-grid">
+            <div class="mdl-cell mdl-cell--8-col">
               <h2>Your safecoin portfolio -- always your data, encrypted and on your device</h2>
 
               <div>Total <span class="total_usd">-</span> USD</div>
@@ -123,7 +129,7 @@
               </div>
             </div>
           </div>
-          
+
         </div>
         <div class="mdl-layout-spacer"></div>
       </div>
