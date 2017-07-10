@@ -391,6 +391,7 @@ function addActionHandlers() {
         init();
         save('verify', verify);
         dialog.close();
+        dialog.querySelector('.mdl-button.close').hidden=false;
     });
 
     actionHandlersInited = true;
