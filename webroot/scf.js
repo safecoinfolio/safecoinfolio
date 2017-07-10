@@ -145,7 +145,8 @@ var USER_ID = 'minky';
 var SECRET_KEY = 'foobar';
 
 var prices = {
-    'btc': [1.0, 2589.0]
+    'btc': [1.0, 2589.0],
+    'eth': [0.1, 258.9]
 };
 
 var portfolio = {
