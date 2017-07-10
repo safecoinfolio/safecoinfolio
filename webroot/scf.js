@@ -156,7 +156,7 @@ var prices = {
 var portfolio = {
 };
 
-function updatePriceFor(symbol) {
+function updatePriceFor(symbol, callback) {
     var url = 'https://api.coinmarketcap.com/v1/ticker/';
     var url_id = MAPPING[symbol];
     if (url_id) {
@@ -164,6 +164,9 @@ function updatePriceFor(symbol) {
             var response = JSON.parse(this.responseText);
             var data = response[0];
             prices[data.symbol.toLowerCase()] = [data.price_btc, data.price_usd];
+            if (typeof callback === "function") {
+                callback(data);
+            }
             console.log(
                 'updating price of ' + data.symbol.toLowerCase() + ' as '
                 + data.price_usd + '$');
@@ -246,7 +249,12 @@ function renderFolio(holdings, prices) {
             continue;
         }
 
-        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
+        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 'fetching price...';
+
+        if (!prices[k]) {
+            updatePriceFor(k, function(){ renderFolio(portfolio, prices)});
+        }
+
         html += '<tr>\
             <td class="mdl-data-table__cell--non-numeric">' + k.toUpperCase() + '</td>\
             <td class="' + k + '_quantity">' + kQuantity + '</td>\
