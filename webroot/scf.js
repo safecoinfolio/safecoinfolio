@@ -403,7 +403,7 @@ function setClock() {
         return;
     }
 
-    setInterval(updatePrices, 30000);
+    setInterval(updatePrices, 300000);
     setInterval(autoSave, 10000);
     setInterval(function() { renderFolio(portfolio, prices) }, 35000);
     clockInited = true;
