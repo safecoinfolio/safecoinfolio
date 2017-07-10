@@ -7,6 +7,10 @@ function test() {
         return false;
     }
 
+    if (typeof Promise !== "function") {
+        return false;
+    }
+
     return true;
 }
 
