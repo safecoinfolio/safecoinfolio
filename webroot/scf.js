@@ -354,6 +354,27 @@ function addActionHandlers() {
 
     var dialog = document.querySelector('dialog');
 
+    function submitChangeUserForm() {
+        USER_ID = document.querySelector('input[name=username]').value;
+        SECRET_KEY = document.querySelector('input[name=password]').value;
+        
+        try {
+            var o = load('verify');
+            if (o !== null && o.id !== verify.id) {
+                alert('wrong password');
+                return;
+            }
+        } catch (e) {
+            alert('wrong password');
+            return;
+        }
+        
+        init();
+        save('verify', verify);
+        dialog.close();
+        dialog.querySelector('.mdl-button.close').hidden = false;
+    }
+
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('symbol-edit')) {
             editSymbol(e.target.dataset.symbol);
@@ -374,27 +395,16 @@ function addActionHandlers() {
         dialog.close();
     });
     dialog.querySelector('.do-change').addEventListener('click', function() {
-        USER_ID = document.querySelector('input[name=username]').value;
-        SECRET_KEY = document.querySelector('input[name=password]').value;
-        
-        try {
-            var o = load('verify');
-            if (o !== null && o.id !== verify.id) {
-                alert('wrong password');
-                return;
-            }
-        } catch (e) {
-            alert('wrong password');
-            return;
-        }
-        
-        init();
-        save('verify', verify);
-        dialog.close();
-        dialog.querySelector('.mdl-button.close').hidden=false;
+        submitChangeUserForm();
     });
 
-    actionHandlersInited = true;
+    dialog.addEventListener('keydown', function(e) {
+        if (e.which === 13 || e.keyCode === 13) {
+            submitChangeUserForm();
+        }
+    });
+
+    actionHandlersInited = true;    
 }
 
 var clockInited = false;
@@ -433,7 +443,7 @@ function init() {
         setClock();
 
         if (USER_ID === 'minky') {
-            dialog.querySelector('.mdl-button.close').hidden=true;
+            dialog.querySelector('.mdl-button.close').hidden = true;
             dialog.showModal();
             return;
         }
