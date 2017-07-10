@@ -325,7 +325,7 @@ function checkPassword() {
 function addSymbol(event) {
     event.preventDefault();
     var form = document.querySelector('.add-symbol-form');
-    var symbol = form.querySelector('input[name=symbol]').value;
+    var symbol = form.querySelector('input[name=symbol]').value.toLowerCase();
     var quantity = form.querySelector('input[name=q]').value;
 
     // check exists
