@@ -1,3 +1,3 @@
-For more details about this cartridge please visit:
- 
-https://github.com/vert-x/openshift-cartridge
+# safecoinfolio
+
+Browser based cryptocurrency portfolio. All your portfolio data are encrypted and never leave the device
