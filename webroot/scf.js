@@ -263,7 +263,7 @@ function renderFolio(holdings, prices) {
             <td class="mdl-data-table__cell--non-numeric">' + k.toUpperCase() + '</td>\
             <td class="' + k + '_quantity">' + kQuantity + '</td>\
             <td>' + kPriceDollar + '</td>\
-            <td>' + typeof kPriceDollar === "number" ? (kQuantity * kPriceDollar) : 'n/a' + '</td>\
+            <td>' + kQuantity * kPriceDollar + '</td>\
             <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button></td>\
         </tr>';
     }
