@@ -1,0 +1,28 @@
+{
+  "name": "safecoinfolio",
+  "version": "1.0.0",
+  "description": "manage your cryptocurrency assets safe and privately",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://5960bccc89f5cf3c8600000a@safecoinfolio-xtra.rhcloud.com/~/git/safecoinfolio.git/"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "altfolio",
+    "portfolio",
+    "bitcoin",
+    "ethereum",
+    "altcoins",
+    "encryption"
+  ],
+  "author": "TL",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "vertx3-full": "^3.4.2"
+  }
+}
