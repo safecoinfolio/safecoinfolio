@@ -22,10 +22,24 @@ var console = require('vertx/console');
 var ip = container.env['OPENSHIFT_VERTX_IP'] || '127.0.0.1';
 var port = parseInt(container.env['OPENSHIFT_VERTX_PORT'] || 8080);
 
-vertx.createHttpServer().requestHandler(function(req) {
-  var file = req.path() === '/' ? 'index.html' : req.path();
-  req.response.sendFile('webroot/' + file);
-}).listen(port, ip, function(err) {
+var routeMatcher = new vertx.RouteMatcher();
+
+routeMatcher.get('/', function(req) {
+    req.response.sendFile('webroot/index.html');
+});
+
+routeMatcher.get('/static/:type/:filename', function(req) {
+    var type = req.params().get('type');
+    if (['css','js','images'].indexOf(type) > -1) {
+        req.response.sendFile('webroot/static/' + type + '/' + req.params().get('filename'));
+    }
+});
+
+routeMatcher.get('/:htmlfile', function(req) {
+    req.response.sendFile('webroot/' + req.params().get('htmlfile'));
+});
+
+vertx.createHttpServer().requestHandler(routeMatcher).listen(port, ip, function(err) {
     if (!err) {
       console.log('Successfully listening on ' + ip + ':' + port);
     } else {
