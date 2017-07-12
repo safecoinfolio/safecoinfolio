@@ -58,3 +58,5 @@ typings/
 .env
 
 .openshift
+
+*.swp
