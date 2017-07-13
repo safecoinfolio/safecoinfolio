@@ -1,0 +1,11 @@
+{
+  "description": "Yoke a middleware framework for Vert.x",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "Paulo Lopes",
+
+  "developers": ["Paulo Lopes"],
+  "keywords": ["framework", "web", "middleware", "yoke", "rest", "restful", "router", "app", "api"],
+  "homepage": "https://github.com/pmlopes/yoke",
+  "main": "server.js",
+  "preserve-cwd": true
+}
