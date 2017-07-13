@@ -63,3 +63,5 @@ node_modules
 .openshift
 
 *.swp
+.acme-challenge
+
