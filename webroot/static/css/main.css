@@ -28,6 +28,16 @@ h1.page-header {
   min-height: 48px;
 }
 
+h2.sub {
+    background: #c9d1e5;
+    padding: 0 7% 0 7%;
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    h2.sub { display: none; }
+}
+
 @media (max-width: 1400px) {
   .inner-grid .mdl-cell.mdl-cell--8-col {
     width: 100%;
