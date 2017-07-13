@@ -23,6 +23,8 @@ var ip = container.env['OPENSHIFT_VERTX_IP'] || '127.0.0.1';
 var port = parseInt(container.env['OPENSHIFT_VERTX_PORT'] || 8080);
 
 var routeMatcher = new vertx.RouteMatcher();
+//var Yoke = require('yoke/Yoke');
+//var yoke = new Yoke();
 
 routeMatcher.get('/', function(req) {
     req.response.sendFile('webroot/index.html');
@@ -36,7 +38,11 @@ routeMatcher.get('/static/:type/:filename', function(req) {
 });
 
 routeMatcher.get('/:htmlfile', function(req) {
-    req.response.sendFile('webroot/' + req.params().get('htmlfile'));
+    req.response.sendFile('webroot/' + req.params().get('htmlfile'), 'webroot/static/html/404.html');
+});
+
+routeMatcher.noMatch(function(req) {
+    req.response.sendFile('webroot/static/html/404.html');
 });
 
 vertx.createHttpServer().requestHandler(routeMatcher).listen(port, ip, function(err) {
