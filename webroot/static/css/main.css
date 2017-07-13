@@ -52,6 +52,10 @@ h2.sub {
     padding-top: 7px;
 }
 
+.table_leader {
+    margin: 10px 0 20px;
+}
+
 main .mdl-chip__contact {
     font-size: 10px;
     line-height: 33px;
