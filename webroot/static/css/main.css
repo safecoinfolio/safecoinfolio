@@ -34,6 +34,29 @@ h2.sub {
     margin: 0;
 }
 
+.total_label {
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+}
+
+.total_label_text {
+    display: inline-block;
+    vertical-align: middle;
+    height: 32px;
+    line-height: 39px;
+}
+
+.price_info {
+    float: right;
+    padding-top: 7px;
+}
+
+main .mdl-chip__contact {
+    font-size: 10px;
+    line-height: 33px;
+}
+
 @media (max-width: 480px) {
     h2.sub { display: none; }
 }
