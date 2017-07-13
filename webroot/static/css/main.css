@@ -15,8 +15,17 @@
   width: 100%;
 }
 .mdl-layout .mdl-layout__header {
-  background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+  background: linear-gradient(141deg, #5E239D 0%, #F61067 119%);
 }
+.mdl-layout .mdl-button--raised.mdl-button--colored {
+  background: #5E239D;
+}
+
+.mdl-layout .mdl-card__title {
+    background-color: #3cdbd3;
+    color: rgba(255,255,255,0.8);
+}
+
 h1.page-header {
   color: white;
   font-weight:800;
@@ -29,9 +38,11 @@ h1.page-header {
 }
 
 h2.sub {
-    background: #c9d1e5;
+    background: #efefef;
     padding: 0 7% 0 7%;
     margin: 0;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 .total_label {
@@ -49,16 +60,21 @@ h2.sub {
 
 .price_info {
     float: right;
-    padding-top: 7px;
+    padding-top: 12px;
 }
 
 .table_leader {
     margin: 10px 0 20px;
 }
 
+main .mdl-chip {
+    background-color:#efefef;
+}
+
 main .mdl-chip__contact {
     font-size: 10px;
     line-height: 33px;
+    background-color: #3CDBD3;
 }
 
 @media (max-width: 480px) {
