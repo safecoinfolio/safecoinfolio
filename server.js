@@ -26,8 +26,25 @@ var routeMatcher = new vertx.RouteMatcher();
 //var Yoke = require('yoke/Yoke');
 //var yoke = new Yoke();
 
+var scfJavaScript = '';
+var scfJavaScriptEtag = 0;
+
+vertx.fileSystem.readFile('webroot/static/js/scf.js', function(err, res) {
+    if (!err) {
+      scfJavaScript = res.toString();
+      scfJavaScriptEtag = res.length();
+    }
+});
+
 routeMatcher.get('/', function(req) {
     req.response.sendFile('webroot/index.html');
+});
+
+routeMatcher.get('/dynamic/js/scf.js', function(req) {
+    req.response.headers().set("Content-Type", "application/javascript");
+    req.response.headers().set("Cache-Control", "public, max-age=86400");
+    req.response.headers().set("ETag", scfJavaScriptEtag);
+    req.response.end(scfJavaScript);
 });
 
 routeMatcher.get('/static/:type/:filename', function(req) {
