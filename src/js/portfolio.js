@@ -41,3 +41,42 @@ function getPortfolio(instruments, prices) {
 
   return highestTotalDesc;
 }
+
+function getAggregateFolio(txns, prices) {
+   var descAggregates = [];
+   
+   var aggregates = {};
+
+   for (var tx in txns) {
+       var txn = txns[tx];
+       if (aggregates[txn.sym]) {
+           var a = aggregates[txn.sym];
+           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);
+           a.avg = txn.q > 0 ? newAvg : a.avg;
+           a.q = parseFloat(a.q) + parseFloat(txn.q);           
+           a.total = a.q * a.mktPrice;
+           a.cost = parseFloat(a.cost) + parseFloat(txn.cost);
+           a.pl = a.total - a.cost;
+       } else {
+           aggregates[txn.sym] = {
+               'sym': txn.sym,
+               'avg': txn.cost / txn.q,
+               'q': txn.q,
+               'mktPrice': prices[txn.sym][1],
+               'total': txn.total,
+               'pl': txn.pl(),
+               'cost': txn.cost
+           };
+       }
+   }
+
+   for (var agg in aggregates) {
+       descAggregates.push(aggregates[agg]);
+   }
+
+   descAggregates.sort(function(a, b) {
+       return b.total - a.total;
+   });
+
+   return descAggregates;
+}

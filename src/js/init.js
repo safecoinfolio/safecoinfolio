@@ -25,6 +25,10 @@ var prices = {
 var portfolio = {
 };
 
+function round(num) {
+    return Math.floor(num * 100) / 100;
+}
+
 function updatePriceFor(symbol, callback) {
     var url = 'https://api.coinmarketcap.com/v1/ticker/';
     var url_id = MAPPING[symbol];
@@ -113,7 +117,8 @@ function renderFolio(holdings, prices) {
     </thead>\
     <tbody>';
 
-    var oFolio = getPortfolio(holdings, prices);
+    //var oFolio = getPortfolio(holdings, prices);
+    var oFolio = getAggregateFolio(TXNS, prices);
 
     for (var k in oFolio) {
         var item = oFolio[k];
@@ -122,7 +127,7 @@ function renderFolio(holdings, prices) {
             continue;
         }
 
-        var kPriceDollar = item.price > 0 ? item.price : 'fetching price...';
+        var kPriceDollar = item.mktPrice > 0 ? item.mktPrice : 'fetching price...';
 
         if (item.price === -1) {
             updatePriceFor(item.sym, function(){ renderFolio(portfolio, prices)});
@@ -135,17 +140,17 @@ function renderFolio(holdings, prices) {
         var avgPrice = 0;
         var pl = 0;
 
-        html += '<tr>\
+        html += '<tr class="row_' + item.sym + '">\
             <td class="mdl-data-table__cell--non-numeric">' + item.sym.toUpperCase() + '</td>\
-            <td class="' + item.sym + '_quantity">' + item.q + '</td>\
-            <td>' + avgPrice + '</td>\
-            <td>' + kPriceDollar + '</td>\
-            <td>' + item.total + '</td>\
-            <td>' + pl + '</td>\
-            <td><button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button></td>\
+            <td class="' + item.sym + '_quantity">' + round(item.q) + '</td>\
+            <td>' + round(item.avg) + '</td>\
+            <td>' + round(kPriceDollar) + '</td>\
+            <td>' + round(item.total) + '</td>\
+            <td>' + round(item.pl) + '</td>\
+            <td> <!-- <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button> --> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised txns-view">Transactions</button></td>\
         </tr>';
     }
-
+    
     if (oFolio.length === 0) {
         html += '<tr><td colspan="7" class="table_msg">Portfolio is empty</td></tr>';
     }
@@ -223,6 +228,7 @@ function addSymbol(event) {
         var mktPrice = data.price_usd;
         var tx = new PortfolioItem(symbol, date, quantity, price, mktPrice);
         addTx(tx);
+        renderFolio(portfolio, prices);
     });    
 
     // check exists
@@ -274,14 +280,21 @@ function addActionHandlers() {
 
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('symbol-edit')) {
-            editSymbol(e.target.dataset.symbol);
+            return editSymbol(e.target.dataset.symbol);
         }
         if (e.target.classList.contains('symbol-remove')) {
-            removeSymbol(e.target.dataset.symbol);
+            return removeSymbol(e.target.dataset.symbol);
         }
         if (e.target.classList.contains('change-user')) {
-            dialog.showModal();
+            return dialog.showModal();
         }
+        if (e.target.classList.contains('txns-view')) {
+            return showTxns(e.target.dataset.symbol);
+        }
+        if (e.target.classList.contains('txns-hide')) {
+            return hideTxns(e.target.dataset.symbol);
+        }
+
     }, { passive: true, capture: true });
 
     document.querySelector('.symbol-add').addEventListener('click', function(e) {
@@ -313,7 +326,7 @@ function setClock() {
 
     setInterval(updatePrices, 300000);
     setInterval(autoSave, 10000);
-    setInterval(function() { renderFolio(portfolio, prices) }, 35000);
+    //setInterval(function() { renderFolio(portfolio, prices) }, 120000);
     clockInited = true;
 }
 
@@ -323,8 +336,12 @@ function migrate() {
         console.log('migrating');
         for (var s in portfolio) {
             // add as tx
+            var p = prices[s] && prices[s].length > 1 ? prices[s][1] : 0;
+            var t = new PortfolioItem(s, new Date()/1000, portfolio[s], p, p);
+            addTx(t);
         }
     }
+    autoSave();
 }
 
 function init() {
