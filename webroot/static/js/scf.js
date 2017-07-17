@@ -232,41 +232,50 @@ function renderFolio(holdings, prices) {
         <tr>\
         <th class="mdl-data-table__cell--non-numeric">Coin</th>\
         <th>Quantity</th>\
-        <th>Unit price (USD)</th>\
-        <th>Total (USD)</th>\
+        <th>Avg. price (USD)</th>\
+        <th>Market price (USD)</th>\
+        <th>Total value (USD)</th>\
+        <th>P/L (USD)</th>\
         <th>Action</th>\
     </tr>\
     </thead>\
     <tbody>';
 
-    for (var k in holdings) {
-        var kQuantity = holdings[k];
+    var oFolio = getPortfolio(holdings, prices);
 
-        if (kQuantity === 0) {
+    for (var k in oFolio) {
+        var item = oFolio[k];
+        
+        if (item.q === 0) {
             continue;
         }
 
-        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 'fetching price...';
+        var kPriceDollar = item.price > 0 ? item.price : 'fetching price...';
 
-        if (!prices[k]) {
-            updatePriceFor(k, function(){ renderFolio(portfolio, prices)});
+        if (item.price === -1) {
+            updatePriceFor(item.sym, function(){ renderFolio(portfolio, prices)});
         }
 
-        if (k in MAPPING === false) {
+        if (item.sym in MAPPING === false) {
             kPriceDollar = 'n/a';
         }
 
+        var avgPrice = 0;
+        var pl = 0;
+
         html += '<tr>\
-            <td class="mdl-data-table__cell--non-numeric">' + k.toUpperCase() + '</td>\
-            <td class="' + k + '_quantity">' + kQuantity + '</td>\
+            <td class="mdl-data-table__cell--non-numeric">' + item.sym.toUpperCase() + '</td>\
+            <td class="' + item.sym + '_quantity">' + item.q + '</td>\
+            <td>' + avgPrice + '</td>\
             <td>' + kPriceDollar + '</td>\
-            <td>' + kQuantity * kPriceDollar + '</td>\
-            <td><button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + k + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button></td>\
+            <td>' + item.total + '</td>\
+            <td>' + pl + '</td>\
+            <td><button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button></td>\
         </tr>';
     }
 
-    if (holdings.length === 0) {
-        html += '<div>Portfolio is empty</div>';
+    if (oFolio.length === 0) {
+        html += '<tr><td colspan="7" class="table_msg">Portfolio is empty</td></tr>';
     }
 
     html += '</tbody></table>';
@@ -310,6 +319,7 @@ function editSymbol(symbol) {
 
 function removeSymbol(symbol) {
     portfolio[symbol] = 0;
+    delete portfolio[symbol];
     autoSave();
     renderFolio(portfolio, prices);
 }
@@ -317,6 +327,7 @@ function removeSymbol(symbol) {
 function autoSave() {
     save('portfolio', portfolio);
     save('prices', prices);
+    save('txns', TXNS);
 }
 
 function checkPassword() {
@@ -332,6 +343,15 @@ function addSymbol(event) {
     var form = document.querySelector('.add-symbol-form');
     var symbol = form.querySelector('input[name=symbol]').value.toLowerCase();
     var quantity = form.querySelector('input[name=q]').value;
+    var date = form.querySelector('input[name=date]').value;
+    var price = form.querySelector('input[name=p]').value;
+ 
+    // fetch price and add transaction
+    updatePriceFor(symbol, function(data) {
+        var mktPrice = data.price_usd;
+        var tx = new PortfolioItem(symbol, date, quantity, price, mktPrice);
+        addTx(tx);
+    });    
 
     // check exists
     if (portfolio[symbol]) {
@@ -425,6 +445,13 @@ function setClock() {
     clockInited = true;
 }
 
+// migrates the tx-less portfolio to a tx based portfolio
+function migrate() {
+    if (TXNS.length === 0 && getPortfolio(portfolio, prices).length > 0) {
+        console.log('migrating');
+    }
+}
+
 function init() {
     if (test() === true) {
         var dialog = document.querySelector('dialog');
@@ -441,6 +468,17 @@ function init() {
         if (load('prices') !== null) {
             prices = load('prices');
         }
+
+        if (load('txns') !== null) {
+            TXNS = load('txns');
+            TXNS = TXNS.map(function(tx) { return Object.assign(new PortfolioItem, tx)});
+        } else {
+            TXNS = [];
+        }
+
+        migrate();
+
+        document.querySelector('input[name=date]').valueAsDate = new Date();
 
         updatePrices();
         addActionHandlers();
@@ -469,22 +507,30 @@ function PortfolioItem(sym, date, q, paid, price) {
   this.sym = sym;
   this.date = date;
   this.q = q;
+  this.cost = q * paid;
   this.price = price;
   this.total = q * price;
 }
 
+PortfolioItem.prototype = {};
+
 PortfolioItem.prototype.isSale = function() {
-  return q >= 0 ? false : true;
+  return this.q >= 0 ? false : true;
 }
 
 PortfolioItem.prototype.isPurchase = function() {
-  return q >= 0 ? true : false;
+  return this.q >= 0 ? true : false;
+}
+
+PortfolioItem.prototype.pl = function() {
+  return this.total - this.cost;
 }
 
 function getPortfolio(instruments, prices) {
   var highestTotalDesc = [];
   for (var sym in instruments) {
-    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, prices[sym]);
+    var price = typeof prices[sym] !== "undefined" ? prices[sym][1] : -1;
+    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, price);
     highestTotalDesc.push(item);
   }
   highestTotalDesc.sort(function(a, b) {
@@ -493,3 +539,6 @@ function getPortfolio(instruments, prices) {
 
   return highestTotalDesc;
 }
+var TXNS = [];
+
+function addTx(item) {TXNS.push(item)}

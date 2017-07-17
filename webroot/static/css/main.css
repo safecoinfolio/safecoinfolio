@@ -21,8 +21,9 @@
   background: #5E239D;
 }
 
-.table_msg {
-    padding: 20px;
+.mdl-layout tbody td.table_msg {
+    text-align: center;
+    padding: 50px 10px;
 }
 
 .mdl-layout .mdl-card__title {

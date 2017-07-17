@@ -9,22 +9,30 @@ function PortfolioItem(sym, date, q, paid, price) {
   this.sym = sym;
   this.date = date;
   this.q = q;
+  this.cost = q * paid;
   this.price = price;
   this.total = q * price;
 }
 
+PortfolioItem.prototype = {};
+
 PortfolioItem.prototype.isSale = function() {
-  return q >= 0 ? false : true;
+  return this.q >= 0 ? false : true;
 }
 
 PortfolioItem.prototype.isPurchase = function() {
-  return q >= 0 ? true : false;
+  return this.q >= 0 ? true : false;
+}
+
+PortfolioItem.prototype.pl = function() {
+  return this.total - this.cost;
 }
 
 function getPortfolio(instruments, prices) {
   var highestTotalDesc = [];
   for (var sym in instruments) {
-    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, prices[sym]);
+    var price = typeof prices[sym] !== "undefined" ? prices[sym][1] : -1;
+    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, price);
     highestTotalDesc.push(item);
   }
   highestTotalDesc.sort(function(a, b) {
