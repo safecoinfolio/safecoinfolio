@@ -21,6 +21,10 @@
   background: #5E239D;
 }
 
+.table_msg {
+    padding: 20px;
+}
+
 .mdl-layout .mdl-card__title {
     background-color: #3cdbd3;
     color: rgba(255,255,255,0.8);

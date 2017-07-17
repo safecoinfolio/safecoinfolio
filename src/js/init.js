@@ -137,6 +137,10 @@ function renderFolio(holdings, prices) {
         </tr>';
     }
 
+    if (holdings.length === 0) {
+        html += '<div class="table_msg">Portfolio is empty</div>';
+    }
+
     html += '</tbody></table>';
 
     document.querySelector('.portfolio_table').innerHTML = html;
