@@ -124,7 +124,15 @@ var MAPPING = {
     'brx': 'breakout-stake',
     'kore': 'korecoin',
     'nsr': 'nushares',
-    'plbt': 'polybius'
+    'plbt': 'polybius',
+    'xrl': 'rialto',
+    'gup': 'guppy',
+    'mue': 'monetaryunit',
+    'cvc': 'cvccoin',
+    'omg': 'omisego',
+    'adx': 'adex',
+    'flo': 'florincoin',
+    'mtl': 'metal'
 };
 function test() {
     if (typeof localStorage === "undefined") {
