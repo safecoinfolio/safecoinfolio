@@ -62,7 +62,7 @@ function getAggregateFolio(txns, prices) {
                'sym': txn.sym,
                'avg': txn.cost / txn.q,
                'q': txn.q,
-               'mktPrice': prices[txn.sym][1],
+               'mktPrice': prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0,
                'total': txn.total,
                'pl': txn.pl(),
                'cost': txn.cost

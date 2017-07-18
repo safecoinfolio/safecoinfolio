@@ -270,7 +270,7 @@ function renderFolio(holdings, prices) {
 
         html += '<tr class="row_' + item.sym + '">\
             <td class="mdl-data-table__cell--non-numeric">' + item.sym.toUpperCase() + '</td>\
-            <td class="' + item.sym + '_quantity">' + item.q + '</td>\
+            <td class="' + item.sym + '_quantity">' + round(item.q) + '</td>\
             <td>' + round(item.avg) + '</td>\
             <td>' + round(kPriceDollar) + '</td>\
             <td>' + round(item.total) + '</td>\
@@ -580,7 +580,7 @@ function getAggregateFolio(txns, prices) {
                'sym': txn.sym,
                'avg': txn.cost / txn.q,
                'q': txn.q,
-               'mktPrice': prices[txn.sym][1],
+               'mktPrice': prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0,
                'total': txn.total,
                'pl': txn.pl(),
                'cost': txn.cost
@@ -621,11 +621,11 @@ function showTxns(symbol) {
 
     sorted.forEach(function(txn) {
         html = '<td>' + txn.date + '</td>\
-            <td>' + txn.q + '</td>\
-            <td>' + txn.cost / txn.q + '</td>\
-            <td>' + txn.price + '</td>\
-            <td>' + txn.total + '</td>\
-            <td>' + txn.pl() + '</td>\
+            <td>' + round(txn.q) + '</td>\
+            <td>' + round(txn.cost / txn.q) + '</td>\
+            <td>' + round(txn.price) + '</td>\
+            <td>' + round(txn.total) + '</td>\
+            <td>' + round(txn.pl()) + '</td>\
             <td>Edit, Delete</td>';
         var node = document.createElement('tr');
         node.innerHTML = html;
