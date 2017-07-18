@@ -51,11 +51,11 @@ function getAggregateFolio(txns, prices) {
        var txn = txns[tx];
        if (aggregates[txn.sym]) {
            var a = aggregates[txn.sym];
-           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);
-           a.avg = txn.q > 0 ? newAvg : a.avg;
+           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);           
            a.q = parseFloat(a.q) + parseFloat(txn.q);           
            a.total = a.q * a.mktPrice;
            a.cost = parseFloat(a.cost) + parseFloat(txn.cost);
+           a.avg = a.cost / a.q;
            a.pl = a.total - a.cost;
        } else {
            aggregates[txn.sym] = {

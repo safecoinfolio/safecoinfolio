@@ -159,20 +159,20 @@ function renderFolio(holdings, prices) {
 
     document.querySelector('.portfolio_table').innerHTML = html;
 
-    updateTotal(holdings, prices);
+    updateTotal(prices);
 }
 
-function updateTotal(holdings, prices) {
+function updateTotal(prices) {
     var total = 0;
+    var total_pl = 0;
 
-    for (var k in holdings) {
-        var kQuantity = holdings[k];
-        var kPriceDollar = prices[k] && prices[k].length > 1 ? prices[k][1] : 0;
+    TXNS.forEach(function(t) {
+        if (typeof t.total === "number") total += t.total;
+        if (typeof t.pl() === "number") total_pl += t.pl();
+    });
 
-        total += kQuantity * kPriceDollar;
-    }
-
-    document.querySelector('.total_usd').innerHTML = total;
+    document.querySelector('.total_usd').innerHTML = round(total);
+    document.querySelector('.total_pl').innerHTML = round(total_pl);
 }
 
 function editSymbol(symbol) {
@@ -187,7 +187,7 @@ function editSymbol(symbol) {
     document.querySelector('.symbol-update-q').addEventListener('click', function(e) {
        e.preventDefault();
        var new_quantity = document.querySelector('input[name=new_quantity]').value;
-       portfolio[symbol] = new_quantity;
+       //portfolio[symbol] = new_quantity;
        cell.innerHTML = new_quantity;
         autoSave();
         renderFolio(portfolio, prices);
@@ -202,7 +202,7 @@ function removeSymbol(symbol) {
 }
 
 function autoSave() {
-    save('portfolio', portfolio);
+    //save('portfolio', portfolio);
     save('prices', prices);
     save('txns', TXNS);
 }
@@ -230,14 +230,6 @@ function addSymbol(event) {
         addTx(tx);
         renderFolio(portfolio, prices);
     });    
-
-    // check exists
-    if (portfolio[symbol]) {
-        var nq = parseFloat(portfolio[symbol]) + parseFloat(quantity);
-        portfolio[symbol] = nq;
-    } else {
-        portfolio[symbol] = quantity;
-    }
 
     updatePriceFor(symbol);
     autoSave();
@@ -294,6 +286,12 @@ function addActionHandlers() {
         if (e.target.classList.contains('txns-hide')) {
             return hideTxns(e.target.dataset.symbol);
         }
+        if (e.target.classList.contains('txn-edit')) {
+            return editTxn(e.target.dataset.id);
+        }
+        if (e.target.classList.contains('txn-delete')) {
+            return deleteTxn(e.target.dataset.id);
+        }
 
     }, { passive: true, capture: true });
 
@@ -341,6 +339,7 @@ function migrate() {
             addTx(t);
         }
     }
+    portfolio = {};
     autoSave();
 }
 

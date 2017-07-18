@@ -84,6 +84,13 @@ header .mdl-layout__header-row {
     line-height: 39px;
 }
 
+.total_pl_text {
+    display: inline-block;
+    vertical-align: middle;
+    height: 32px;
+    line-height: 39px;
+}
+
 .price_info {
     float: right;
     padding-top: 12px;
@@ -95,6 +102,10 @@ header .mdl-layout__header-row {
 
 main .mdl-chip {
     background-color:#efefef;
+}
+
+.txn-detail input {
+    max-width: 80px;
 }
 
 main .mdl-chip__contact {
