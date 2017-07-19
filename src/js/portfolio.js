@@ -66,7 +66,7 @@ function getAggregateFolio(txns, prices) {
                'q': txn.q,
                'mktPrice': mktPrice,
                'total': txn.q * mktPrice,
-               'pl': txn.pl(),
+               'pl': (txn.q * mktPrice) - txn.cost,
                'cost': txn.cost
            };
        }
