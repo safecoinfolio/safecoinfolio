@@ -584,12 +584,13 @@ function getAggregateFolio(txns, prices) {
            a.avg = a.cost / a.q;
            a.pl = a.total - a.cost;
        } else {
+           var mktPrice = prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0;
            aggregates[txn.sym] = {
                'sym': txn.sym,
                'avg': txn.cost / txn.q,
                'q': txn.q,
-               'mktPrice': prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0,
-               'total': txn.total,
+               'mktPrice': mktPrice,
+               'total': txn.q * mktPrice,
                'pl': txn.pl(),
                'cost': txn.cost
            };
