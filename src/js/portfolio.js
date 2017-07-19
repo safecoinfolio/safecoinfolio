@@ -44,16 +44,17 @@ function getPortfolio(instruments, prices) {
 
 function getAggregateFolio(txns, prices) {
    var descAggregates = [];
-   
+
    var aggregates = {};
 
    for (var tx in txns) {
        var txn = txns[tx];
        if (aggregates[txn.sym]) {
            var a = aggregates[txn.sym];
-           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);           
-           a.q = parseFloat(a.q) + parseFloat(txn.q);           
-           a.total = a.q * a.mktPrice;
+           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);
+           a.q = parseFloat(a.q) + parseFloat(txn.q);
+           var mktPrice = prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0;
+           a.total = a.q * mktPrice;
            a.cost = parseFloat(a.cost) + parseFloat(txn.cost);
            a.avg = a.cost / a.q;
            a.pl = a.total - a.cost;

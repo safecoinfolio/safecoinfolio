@@ -1,3 +1,139 @@
+var MAPPING = {
+    'btc': 'bitcoin',
+    'eth': 'ethereum',
+    'xrp': 'ripple',
+    'ltc': 'litecoin',
+    'etc': 'ethereum-classic',
+    'dash': 'dash',
+    'nem': 'nem',
+    'miota': 'iota',
+    'xmr': 'monero',
+    'bts': 'bitshares',
+    'strat': 'stratis',
+    'eos': 'eos',
+    'zec': 'zcash',
+    'bcc': 'bitconnect',
+    'waves': 'waves',
+    'steem': 'steem',
+    'ans': 'antshares',
+    'gno': 'gnosis-gno',
+    'gnt': 'golem-network-tokens',
+    'bcn': 'bytecoin-bcn',
+    'doge': 'dogecoin',
+    'icn': 'iconomi',
+    'sc': 'siacoin',
+    'rep': 'augur',
+    'veri': 'veritaseum',
+    'lsk': 'lisk',
+    'usdt': 'tether',
+    'xlm': 'stellar',
+    'gbyte': 'byteball',
+    'maid': 'maidsafecoin',
+    'fct': 'factom',
+    'dcr': 'decred',
+    'game': 'gamecredits',
+    'snt': 'status',
+    'ardr': 'ardor',
+    'kmd': 'komodo',
+    'dgb': 'digibyte',
+    'pivx': 'pivx',
+    'mcap': 'mcap',
+    'dgd': 'digixdao',
+    'pay': 'tenx',
+    'nxt': 'nxt',
+    'bat': 'basic-attention-token',
+    'bnt': 'bancor',
+    'sngls': 'singulardtv',
+    'btcd': 'bitcoindark',
+    'ant': 'aragon',
+    'mgo': 'mobilego',
+    'sys': 'syscoin',
+    '1st': 'fistblood',
+    'ark': 'ark',
+    'ppc': 'peercoin',
+    'edg': 'edgeless',
+    'fun': 'funfair',
+    'emc': 'emercoin',
+    'lkk': 'lykke',
+    'leo': 'leocoin',
+    'dct': 'decent',
+    'nxs': 'nexus',
+    'ubq': 'ubiq',
+    'xvg': 'verge',
+    'round': 'round',
+    'rdd': 'reddcoin',
+    'xas': 'asch',
+    'nmc': 'namecoin',
+    'mona': 'monacoin',
+    'mln': 'melon',
+    'dbix': 'dubaicoin-dbix',
+    'soar': 'soarcoin',
+    'cloak': 'cloakcoin',
+    'wings': 'wings',
+    'rlc': 'rlc',
+    'sjcx': 'storjcoin-x',
+    'dice': 'etheroll',
+    'nmr': 'numeraire',
+    'ppy': 'peerplay-ppy',
+    'lbc': 'library-credit',
+    'nlg': 'gulden',
+    'omni': 'omni',
+    'xaur': 'xaurum',
+    'bay': 'bitbay',
+    'qrl': 'quantum-resistant-ledger',
+    'xzc': 'zcoin',
+    'vsl': 'vslice',
+    'xcp': 'counterparty',
+    'xel': 'elastic',
+    'blk': 'blackcoin',
+    'obits': 'obits',
+    'amp': 'synereo',
+    'storj': 'storj',
+    'hmq': 'humaiq',
+    'qau': 'quantum',
+    'ybc': 'ybcoin',
+    'sky': 'skycoin',
+    'via': 'viacoin',
+    'trst': 'trust',
+    'edr': 'e-dinar-coin',
+    'pot': 'potcoin',
+    'block': 'blocknet',
+    'myst': 'mysterium',
+    'xdn': 'digitalnote',
+    'crw': 'crown',
+    'burst': 'burst',
+    'sib': 'sibcoin',
+    'swt': 'swarm-city',
+    'adt': 'adtoken',
+    'agrs': 'agoras-tokens',
+    'cfi': 'cofound-it',
+    'nav': 'nav-coin',
+    'uny': 'unity-ingot',
+    'vtc': 'vertcoin',
+    'enrg': 'energycoin',
+    'sls': 'salus',
+    'moon': 'mooncoin',
+    'mco': 'monaco',
+    'ptoy': 'patientory',
+    'xbc': 'bitcoin-plus',
+    'ion': 'ion',
+    'wct': 'waves-community-token',
+    'zrc': 'zrcoin',
+    'sphr': 'sphere',
+    'lun': 'lunyr',
+    'brx': 'breakout-stake',
+    'kore': 'korecoin',
+    'nsr': 'nushares',
+    'plbt': 'polybius',
+    'xrl': 'rialto',
+    'gup': 'guppy',
+    'mue': 'monetaryunit',
+    'cvc': 'cvccoin',
+    'omg': 'omisego',
+    'adx': 'adex',
+    'flo': 'florincoin',
+    'mtl': 'metal'
+};
 function test() {
     if (typeof localStorage === "undefined") {
         return false;
@@ -387,6 +523,89 @@ function init() {
 }
 
 init();
+/**
+ * sym = intrument symbol
+ * date = transaction date
+ * q = quantity
+ * paid = amount paid
+ * price = price per unit at the time of the transaction
+ */
+function PortfolioItem(sym, date, q, paid, price) {
+  this.sym = sym;
+  this.date = date;
+  this.q = q;
+  this.cost = q * paid;
+  this.price = price;
+  this.total = q * price;
+}
+
+PortfolioItem.prototype = {};
+
+PortfolioItem.prototype.isSale = function() {
+  return this.q >= 0 ? false : true;
+}
+
+PortfolioItem.prototype.isPurchase = function() {
+  return this.q >= 0 ? true : false;
+}
+
+PortfolioItem.prototype.pl = function() {
+  return this.total - this.cost;
+}
+
+function getPortfolio(instruments, prices) {
+  var highestTotalDesc = [];
+  for (var sym in instruments) {
+    var price = typeof prices[sym] !== "undefined" ? prices[sym][1] : -1;
+    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, price);
+    highestTotalDesc.push(item);
+  }
+  highestTotalDesc.sort(function(a, b) {
+    return b.total - a.total;
+  });
+
+  return highestTotalDesc;
+}
+
+function getAggregateFolio(txns, prices) {
+   var descAggregates = [];
+
+   var aggregates = {};
+
+   for (var tx in txns) {
+       var txn = txns[tx];
+       if (aggregates[txn.sym]) {
+           var a = aggregates[txn.sym];
+           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);
+           a.q = parseFloat(a.q) + parseFloat(txn.q);
+           var mktPrice = prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0;
+           a.total = a.q * mktPrice;
+           a.cost = parseFloat(a.cost) + parseFloat(txn.cost);
+           a.avg = a.cost / a.q;
+           a.pl = a.total - a.cost;
+       } else {
+           aggregates[txn.sym] = {
+               'sym': txn.sym,
+               'avg': txn.cost / txn.q,
+               'q': txn.q,
+               'mktPrice': prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0,
+               'total': txn.total,
+               'pl': txn.pl(),
+               'cost': txn.cost
+           };
+       }
+   }
+
+   for (var agg in aggregates) {
+       descAggregates.push(aggregates[agg]);
+   }
+
+   descAggregates.sort(function(a, b) {
+       return b.total - a.total;
+   });
+
+   return descAggregates;
+}
 var TXNS = [];
 
 function addTx(item) {TXNS.push(addTxId(item))}
@@ -511,222 +730,4 @@ function hideTxns(symbol) {
     bt.classList.add('txns-view');
     bt.classList.remove('txns-hide');
     bt.innerHTML = 'Transactions';
-}
-var MAPPING = {
-    'btc': 'bitcoin',
-    'eth': 'ethereum',
-    'xrp': 'ripple',
-    'ltc': 'litecoin',
-    'etc': 'ethereum-classic',
-    'dash': 'dash',
-    'nem': 'nem',
-    'miota': 'iota',
-    'xmr': 'monero',
-    'bts': 'bitshares',
-    'strat': 'stratis',
-    'eos': 'eos',
-    'zec': 'zcash',
-    'bcc': 'bitconnect',
-    'waves': 'waves',
-    'steem': 'steem',
-    'ans': 'antshares',
-    'gno': 'gnosis-gno',
-    'gnt': 'golem-network-tokens',
-    'bcn': 'bytecoin-bcn',
-    'doge': 'dogecoin',
-    'icn': 'iconomi',
-    'sc': 'siacoin',
-    'rep': 'augur',
-    'veri': 'veritaseum',
-    'lsk': 'lisk',
-    'usdt': 'tether',
-    'xlm': 'stellar',
-    'gbyte': 'byteball',
-    'maid': 'maidsafecoin',
-    'fct': 'factom',
-    'dcr': 'decred',
-    'game': 'gamecredits',
-    'snt': 'status',
-    'ardr': 'ardor',
-    'kmd': 'komodo',
-    'dgb': 'digibyte',
-    'pivx': 'pivx',
-    'mcap': 'mcap',
-    'dgd': 'digixdao',
-    'pay': 'tenx',
-    'nxt': 'nxt',
-    'bat': 'basic-attention-token',
-    'bnt': 'bancor',
-    'sngls': 'singulardtv',
-    'btcd': 'bitcoindark',
-    'ant': 'aragon',
-    'mgo': 'mobilego',
-    'sys': 'syscoin',
-    '1st': 'fistblood',
-    'ark': 'ark',
-    'ppc': 'peercoin',
-    'edg': 'edgeless',
-    'fun': 'funfair',
-    'emc': 'emercoin',
-    'lkk': 'lykke',
-    'leo': 'leocoin',
-    'dct': 'decent',
-    'nxs': 'nexus',
-    'ubq': 'ubiq',
-    'xvg': 'verge',
-    'round': 'round',
-    'rdd': 'reddcoin',
-    'xas': 'asch',
-    'nmc': 'namecoin',
-    'mona': 'monacoin',
-    'mln': 'melon',
-    'dbix': 'dubaicoin-dbix',
-    'soar': 'soarcoin',
-    'cloak': 'cloakcoin',
-    'wings': 'wings',
-    'rlc': 'rlc',
-    'sjcx': 'storjcoin-x',
-    'dice': 'etheroll',
-    'nmr': 'numeraire',
-    'ppy': 'peerplay-ppy',
-    'lbc': 'library-credit',
-    'nlg': 'gulden',
-    'omni': 'omni',
-    'xaur': 'xaurum',
-    'bay': 'bitbay',
-    'qrl': 'quantum-resistant-ledger',
-    'xzc': 'zcoin',
-    'vsl': 'vslice',
-    'xcp': 'counterparty',
-    'xel': 'elastic',
-    'blk': 'blackcoin',
-    'obits': 'obits',
-    'amp': 'synereo',
-    'storj': 'storj',
-    'hmq': 'humaiq',
-    'qau': 'quantum',
-    'ybc': 'ybcoin',
-    'sky': 'skycoin',
-    'via': 'viacoin',
-    'trst': 'trust',
-    'edr': 'e-dinar-coin',
-    'pot': 'potcoin',
-    'block': 'blocknet',
-    'myst': 'mysterium',
-    'xdn': 'digitalnote',
-    'crw': 'crown',
-    'burst': 'burst',
-    'sib': 'sibcoin',
-    'swt': 'swarm-city',
-    'adt': 'adtoken',
-    'agrs': 'agoras-tokens',
-    'cfi': 'cofound-it',
-    'nav': 'nav-coin',
-    'uny': 'unity-ingot',
-    'vtc': 'vertcoin',
-    'enrg': 'energycoin',
-    'sls': 'salus',
-    'moon': 'mooncoin',
-    'mco': 'monaco',
-    'ptoy': 'patientory',
-    'xbc': 'bitcoin-plus',
-    'ion': 'ion',
-    'wct': 'waves-community-token',
-    'zrc': 'zrcoin',
-    'sphr': 'sphere',
-    'lun': 'lunyr',
-    'brx': 'breakout-stake',
-    'kore': 'korecoin',
-    'nsr': 'nushares',
-    'plbt': 'polybius',
-    'xrl': 'rialto',
-    'gup': 'guppy',
-    'mue': 'monetaryunit',
-    'cvc': 'cvccoin',
-    'omg': 'omisego',
-    'adx': 'adex',
-    'flo': 'florincoin',
-    'mtl': 'metal'
-};
-/**
- * sym = intrument symbol
- * date = transaction date
- * q = quantity
- * paid = amount paid
- * price = price per unit at the time of the transaction
- */
-function PortfolioItem(sym, date, q, paid, price) {
-  this.sym = sym;
-  this.date = date;
-  this.q = q;
-  this.cost = q * paid;
-  this.price = price;
-  this.total = q * price;
-}
-
-PortfolioItem.prototype = {};
-
-PortfolioItem.prototype.isSale = function() {
-  return this.q >= 0 ? false : true;
-}
-
-PortfolioItem.prototype.isPurchase = function() {
-  return this.q >= 0 ? true : false;
-}
-
-PortfolioItem.prototype.pl = function() {
-  return this.total - this.cost;
-}
-
-function getPortfolio(instruments, prices) {
-  var highestTotalDesc = [];
-  for (var sym in instruments) {
-    var price = typeof prices[sym] !== "undefined" ? prices[sym][1] : -1;
-    var item = new PortfolioItem(sym, Math.floor(new Date()/1000), instruments[sym], 0, price);
-    highestTotalDesc.push(item);
-  }
-  highestTotalDesc.sort(function(a, b) {
-    return b.total - a.total;
-  });
-
-  return highestTotalDesc;
-}
-
-function getAggregateFolio(txns, prices) {
-   var descAggregates = [];
-   
-   var aggregates = {};
-
-   for (var tx in txns) {
-       var txn = txns[tx];
-       if (aggregates[txn.sym]) {
-           var a = aggregates[txn.sym];
-           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);           
-           a.q = parseFloat(a.q) + parseFloat(txn.q);           
-           a.total = a.q * a.mktPrice;
-           a.cost = parseFloat(a.cost) + parseFloat(txn.cost);
-           a.avg = a.cost / a.q;
-           a.pl = a.total - a.cost;
-       } else {
-           aggregates[txn.sym] = {
-               'sym': txn.sym,
-               'avg': txn.cost / txn.q,
-               'q': txn.q,
-               'mktPrice': prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0,
-               'total': txn.total,
-               'pl': txn.pl(),
-               'cost': txn.cost
-           };
-       }
-   }
-
-   for (var agg in aggregates) {
-       descAggregates.push(aggregates[agg]);
-   }
-
-   descAggregates.sort(function(a, b) {
-       return b.total - a.total;
-   });
-
-   return descAggregates;
 }
