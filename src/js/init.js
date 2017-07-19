@@ -122,7 +122,7 @@ function renderFolio(holdings, prices) {
 
     for (var k in oFolio) {
         var item = oFolio[k];
-        
+
         if (item.q === 0) {
             continue;
         }
@@ -150,7 +150,7 @@ function renderFolio(holdings, prices) {
             <td> <!-- <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button> --> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised txns-view">Transactions</button></td>\
         </tr>';
     }
-    
+
     if (oFolio.length === 0) {
         html += '<tr><td colspan="7" class="table_msg">Portfolio is empty</td></tr>';
     }
@@ -167,8 +167,10 @@ function updateTotal(prices) {
     var total_pl = 0;
 
     TXNS.forEach(function(t) {
-        if (typeof t.total === "number") total += t.total;
-        if (typeof t.pl() === "number") total_pl += t.pl();
+        if (prices[t.sym] && prices[t.sym].length > 1) {
+            total += t.q * prices[t.sym][1];
+            total_pl += (t.q * prices[t.sym][1]) - t.cost;
+        }
     });
 
     document.querySelector('.total_usd').innerHTML = round(total);
@@ -222,14 +224,14 @@ function addSymbol(event) {
     var quantity = form.querySelector('input[name=q]').value;
     var date = form.querySelector('input[name=date]').value;
     var price = form.querySelector('input[name=p]').value;
- 
+
     // fetch price and add transaction
     updatePriceFor(symbol, function(data) {
         var mktPrice = data.price_usd;
         var tx = new PortfolioItem(symbol, date, quantity, price, mktPrice);
         addTx(tx);
         renderFolio(portfolio, prices);
-    });    
+    });
 
     updatePriceFor(symbol);
     autoSave();
