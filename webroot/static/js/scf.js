@@ -402,6 +402,7 @@ function renderFolio(holdings, prices) {
 
         var avgPrice = 0;
         var pl = 0;
+        var pl_class = item.pl >= 0 ? 'profit' : 'loss';
 
         html += '<tr class="row_' + item.sym + '">\
             <td class="mdl-data-table__cell--non-numeric">' + item.sym.toUpperCase() + '</td>\
@@ -409,7 +410,7 @@ function renderFolio(holdings, prices) {
             <td>' + round(item.avg) + '</td>\
             <td>' + round(kPriceDollar) + '</td>\
             <td>' + round(item.total) + '</td>\
-            <td>' + round(item.pl) + '</td>\
+            <td class="' + pl_class + '">' + round(item.pl) + '</td>\
             <td> <!-- <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button> --> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised txns-view">Transactions</button></td>\
         </tr>';
     }
@@ -436,8 +437,14 @@ function updateTotal(prices) {
         }
     });
 
+    var pl_class = total_pl >= 0 ? 'profit' : 'loss';
+
     document.querySelector('.total_usd').innerHTML = round(total);
-    document.querySelector('.total_pl').innerHTML = round(total_pl);
+    var total_pl_el = document.querySelector('.total_pl');
+    total_pl_el.innerHTML = round(total_pl);
+    total_pl_el.classList.remove('profit');
+    total_pl_el.classList.remove('loss');
+    total_pl_el.classList.add(pl_class);
 }
 
 function editSymbol(symbol) {
