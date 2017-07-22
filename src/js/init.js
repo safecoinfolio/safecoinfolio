@@ -158,7 +158,8 @@ function renderFolio(holdings, prices) {
 
     html += '</tbody></table>';
 
-    document.querySelector('.portfolio_table').innerHTML = html;
+    var table = document.querySelector('.portfolio_table')
+    if (table) table.innerHTML = html;
 
     updateTotal(prices);
 }
@@ -176,12 +177,15 @@ function updateTotal(prices) {
 
     var pl_class = total_pl >= 0 ? 'profit' : 'loss';
 
-    document.querySelector('.total_usd').innerHTML = round(total);
+    var total_usd_el = document.querySelector('.total_usd');
+    if (total_usd_el) total_usd_el.innerHTML = round(total);
     var total_pl_el = document.querySelector('.total_pl');
-    total_pl_el.innerHTML = round(total_pl);
-    total_pl_el.classList.remove('profit');
-    total_pl_el.classList.remove('loss');
-    total_pl_el.classList.add(pl_class);
+    if (total_pl_el) {
+       total_pl_el.innerHTML = round(total_pl);
+       total_pl_el.classList.remove('profit');
+       total_pl_el.classList.remove('loss');
+       total_pl_el.classList.add(pl_class);
+    }
 }
 
 function editSymbol(symbol) {
@@ -304,22 +308,35 @@ function addActionHandlers() {
 
     }, { passive: true, capture: true });
 
-    document.querySelector('.symbol-add').addEventListener('click', function(e) {
-        addSymbol(e);
-    });
+    var addBt = document.querySelector('.symbol-add');
+    if (addBt) {
+        addBt.addEventListener('click', function(e) {
+            addSymbol(e);
+        });
+    }
 
-    dialog.querySelector('.close').addEventListener('click', function() {
-        dialog.close();
-    });
-    dialog.querySelector('.do-change').addEventListener('click', function() {
-        submitChangeUserForm();
-    });
+    if (dialog) {
+	var closeBt = dialog.querySelector('.close');
+	if (closeBt) {
+            closeBt.addEventListener('click', function() {
+		dialog.close();
+            });
+	}
 
-    dialog.addEventListener('keydown', function(e) {
-        if (e.which === 13 || e.keyCode === 13) {
-            submitChangeUserForm();
-        }
-    });
+	var doChangeBt = dialog.querySelector('.do-change');
+	if (doChangeBt) {
+            doChangeBt.addEventListener('click', function() {
+		submitChangeUserForm();
+            });
+	}
+	
+
+	dialog.addEventListener('keydown', function(e) {
+            if (e.which === 13 || e.keyCode === 13) {
+		submitChangeUserForm();
+            }
+	});
+    }
 
     actionHandlersInited = true;
 }
@@ -355,7 +372,7 @@ function migrate() {
 function init() {
     if (test() === true) {
         var dialog = document.querySelector('dialog');
-        if (! dialog.showModal) {
+        if (dialog && !dialog.showModal) {
             dialogPolyfill.registerDialog(dialog);
         }
 
@@ -378,7 +395,8 @@ function init() {
 
         migrate();
 
-        document.querySelector('input[name=date]').valueAsDate = new Date();
+        var inputDate = document.querySelector('input[name=date]');
+        if (inputDate) inputDate.valueAsDate = new Date();
 
         updatePrices();
         addActionHandlers();
@@ -386,7 +404,9 @@ function init() {
         setClock();
 
         if (USER_ID === 'minky') {
-            dialog.querySelector('.mdl-button.close').hidden = true;
+            if (!dialog) return;
+            var closeBt = dialog.querySelector('.mdl-button.close');
+            if (closeBt) closeBt.hidden = true;
             dialog.showModal();
             return;
         }
