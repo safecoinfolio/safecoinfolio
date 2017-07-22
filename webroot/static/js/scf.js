@@ -593,11 +593,10 @@ function updatePriceFor(symbol, callback) {
 }
 
 function updatePrices() {
-
-    for (var symbol in portfolio) {
-        updatePriceFor(symbol.toLowerCase());
-    }
-
+    var all = getAggregateFolio(TXNS, {});
+    all.forEach(function(coin) {
+        updatePriceFor(coin.sym);
+    });
 }
 function save(key, jsonData) {
     if (USER_ID === 'minky') {
