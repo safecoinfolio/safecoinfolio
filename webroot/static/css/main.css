@@ -21,6 +21,14 @@
   background: #5E239D;
 }
 
+.loss {
+    color: #b21338;
+}
+
+.profit {
+    color: #317007;
+}
+
 .mdl-layout tbody td.table_msg {
     text-align: center;
     padding: 50px 10px;

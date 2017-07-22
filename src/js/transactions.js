@@ -50,12 +50,14 @@ function showTxns(symbol) {
     bt.innerHTML = 'Hide txns';
 }
 function getTxnRowHtml(txn) {
+    var pl = txn.pl();
+    var pl_class = pl >= 0 ? 'profit' : 'loss';
     return '<td>' + txn.date + '</td>\
             <td>' + round(txn.q) + '</td>\
             <td>' + round(txn.cost / txn.q) + '</td>\
-            <td>' + round(txn.price) + '</td>\
-            <td>' + round(txn.total) + '</td>\
-            <td>' + round(txn.pl()) + '</td>\
+            <td></td>\
+            <td></td>\
+            <td class="' + pl_class + '">' + round(pl) + '</td>\
             <td><a href="#" data-id="' + txn.id + '" class="txn-edit">Edit</a>, <a href="#" data-id="' + txn.id + '" class="txn-delete">Delete</a></td>';
 }
 
@@ -90,8 +92,8 @@ function editTxn(id) {
     var html = '<td><input type="text" name="date" value="' + txn.date + '"></td>\
                 <td><input type="text" name="q" value="' + txn.q + '"></td>\
                 <td><input type="text" name="avg" value="' + (txn.cost / txn.q) + '"></td>\
-                <td><input type="text" name="price" value="' + txn.price + '"></td>\
-                <td><input type="text" name="total" value="' + txn.total + '"></td>\
+                <td></td>\
+                <td></td>\
                 <td><input type="text" value="' + txn.pl() + '"></td>\
                 <td><a href="#" class="txn-update">Save</a><a href="#" class="txn-edit-cancel">Cancel</a></td>';
    tr.innerHTML = html;
@@ -103,8 +105,8 @@ function editTxn(id) {
        txn.date = tr.querySelector('input[name=date]').value;
        txn.q = tr.querySelector('input[name=q]').value;
        txn.cost = tr.querySelector('input[name=avg]').value * txn.q;
-       txn.price = tr.querySelector('input[name=price]').value;
-       txn.total = tr.querySelector('input[name=total]').value;
+       //txn.price = tr.querySelector('input[name=price]').value;
+       //txn.total = tr.querySelector('input[name=total]').value;
        tr.innerHTML = getTxnRowHtml(txn);
        autoSave();
        renderFolio(portfolio, prices);
