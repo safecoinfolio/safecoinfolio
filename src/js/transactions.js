@@ -35,7 +35,7 @@ function showTxns(symbol) {
     });
 
     sorted.forEach(function(txn, index) {
-        txn = addTxId(txn); // remove sept-2017                
+        txn = addTxId(txn); // remove sept-2017
         var node = document.createElement('tr');
         node.innerHTML = getTxnRowHtml(txn);
         node.classList.add('txn-detail');
@@ -74,7 +74,7 @@ function deleteTxn(id) {
    }
 
    document.querySelector('.txn-id-' + id).remove();
-   renderFolio(portfolio, prices);
+   renderFolio(prices);
    autoSave();
 }
 
@@ -109,13 +109,13 @@ function editTxn(id) {
        //txn.total = tr.querySelector('input[name=total]').value;
        tr.innerHTML = getTxnRowHtml(txn);
        autoSave();
-       renderFolio(portfolio, prices);
+       renderFolio(prices);
    }
 }
 
 function hideTxns(symbol) {
     var row = document.querySelector('.row_' + symbol);
- 
+
     document.querySelectorAll('.txn-detail-' + symbol).forEach(function(node) {
         node.remove();
     });

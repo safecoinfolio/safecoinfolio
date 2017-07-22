@@ -29,60 +29,6 @@ function round(num) {
     return Math.floor(num * 100) / 100;
 }
 
-function updatePriceFor(symbol, callback) {
-    var url = 'https://api.coinmarketcap.com/v1/ticker/';
-    var url_id = MAPPING[symbol];
-    if (url_id) {
-        get(url + url_id + '/', function () {
-            var response = JSON.parse(this.responseText);
-            var data = response[0];
-            prices[data.symbol.toLowerCase()] = [data.price_btc, data.price_usd];
-            if (typeof callback === "function") {
-                callback(data);
-            }
-            console.log(
-                'updating price of ' + data.symbol.toLowerCase() + ' as '
-                + data.price_usd + '$');
-        });
-    }
-}
-
-function updatePrices() {
-
-    for (var symbol in portfolio) {
-        updatePriceFor(symbol.toLowerCase());
-    }
-
-}
-
-function get(url, callback) {
-    var req = new XMLHttpRequest();
-    req.addEventListener("load", callback);
-    req.open("GET", url);
-    req.setRequestHeader('Accept', '*/*');
-    req.send();
-}
-
-function save(key, jsonData) {
-    if (USER_ID === 'minky') {
-        return;
-    }
-
-    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(jsonData), SECRET_KEY);
-    localStorage.setItem(USER_ID + '_' + key, ciphertext);
-}
-
-function load(key) {
-    var data = localStorage.getItem(USER_ID + '_' + key);
-
-    if (data === null) {
-        return null;
-    }
-
-    var bytes  = CryptoJS.AES.decrypt(data, SECRET_KEY);
-    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-}
-
 function renderInputKey() {
     var html = '<form class="auth">'
         + 'ID <input type="text" name="id">'
@@ -102,155 +48,12 @@ function renderInputKey() {
     });
 }
 
-function renderFolio(holdings, prices) {
-    var html = '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">\
-        <thead>\
-        <tr>\
-        <th class="mdl-data-table__cell--non-numeric">Coin</th>\
-        <th>Quantity</th>\
-        <th>Avg. price (USD)</th>\
-        <th>Market price (USD)</th>\
-        <th>Total value (USD)</th>\
-        <th>P/L (USD)</th>\
-        <th>Action</th>\
-    </tr>\
-    </thead>\
-    <tbody>';
-
-    //var oFolio = getPortfolio(holdings, prices);
-    var oFolio = getAggregateFolio(TXNS, prices);
-
-    for (var k in oFolio) {
-        var item = oFolio[k];
-
-        if (item.q === 0) {
-            continue;
-        }
-
-        var kPriceDollar = item.mktPrice > 0 ? item.mktPrice : 'fetching price...';
-
-        if (item.price === -1) {
-            updatePriceFor(item.sym, function(){ renderFolio(portfolio, prices)});
-        }
-
-        if (item.sym in MAPPING === false) {
-            kPriceDollar = 'n/a';
-        }
-
-        var avgPrice = 0;
-        var pl = 0;
-        var pl_class = item.pl >= 0 ? 'profit' : 'loss';
-
-        html += '<tr class="row_' + item.sym + '">\
-            <td class="mdl-data-table__cell--non-numeric">' + item.sym.toUpperCase() + '</td>\
-            <td class="' + item.sym + '_quantity">' + round(item.q) + '</td>\
-            <td>' + round(item.avg) + '</td>\
-            <td>' + round(kPriceDollar) + '</td>\
-            <td>' + round(item.total) + '</td>\
-            <td class="' + pl_class + '">' + round(item.pl) + '</td>\
-            <td> <!-- <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-edit">Edit</button> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised symbol-remove">Remove</button> --> <button data-symbol="' + item.sym + '" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised txns-view">Transactions</button></td>\
-        </tr>';
-    }
-
-    if (oFolio.length === 0) {
-        html += '<tr><td colspan="7" class="table_msg">Portfolio is empty</td></tr>';
-    }
-
-    html += '</tbody></table>';
-
-    var table = document.querySelector('.portfolio_table')
-    if (table) table.innerHTML = html;
-
-    updateTotal(prices);
-}
-
-function updateTotal(prices) {
-    var total = 0;
-    var total_pl = 0;
-
-    TXNS.forEach(function(t) {
-        if (prices[t.sym] && prices[t.sym].length > 1) {
-            total += t.q * prices[t.sym][1];
-            total_pl += (t.q * prices[t.sym][1]) - t.cost;
-        }
-    });
-
-    var pl_class = total_pl >= 0 ? 'profit' : 'loss';
-
-    var total_usd_el = document.querySelector('.total_usd');
-    if (total_usd_el) total_usd_el.innerHTML = round(total);
-    var total_pl_el = document.querySelector('.total_pl');
-    if (total_pl_el) {
-       total_pl_el.innerHTML = round(total_pl);
-       total_pl_el.classList.remove('profit');
-       total_pl_el.classList.remove('loss');
-       total_pl_el.classList.add(pl_class);
-    }
-}
-
-function editSymbol(symbol) {
-    var cell = document.querySelector('.' + symbol + '_quantity');
-
-    if (typeof cell === "undefined") {
-        return;
-    }
-
-    var html = '<form><input type="number" name="new_quantity" value="' + portfolio[symbol] + '"><button class="symbol-update-q">update</button></form>';
-    cell.innerHTML = html;
-    document.querySelector('.symbol-update-q').addEventListener('click', function(e) {
-       e.preventDefault();
-       var new_quantity = document.querySelector('input[name=new_quantity]').value;
-       //portfolio[symbol] = new_quantity;
-       cell.innerHTML = new_quantity;
-        autoSave();
-        renderFolio(portfolio, prices);
-    });
-}
-
-function removeSymbol(symbol) {
-    portfolio[symbol] = 0;
-    delete portfolio[symbol];
-    autoSave();
-    renderFolio(portfolio, prices);
-}
-
-function autoSave() {
-    //save('portfolio', portfolio);
-    save('prices', prices);
-    save('txns', TXNS);
-}
-
 function checkPassword() {
     if (load('check') === verify) {
         return true;
     } else {
         return false;
     }
-}
-
-function addSymbol(event) {
-    event.preventDefault();
-    var form = document.querySelector('.add-symbol-form');
-    var symbol = form.querySelector('input[name=symbol]').value.toLowerCase();
-    var quantity = form.querySelector('input[name=q]').value;
-    var date = form.querySelector('input[name=date]').value;
-    var price = form.querySelector('input[name=p]').value;
-
-    // fetch price and add transaction
-    updatePriceFor(symbol, function(data) {
-        var mktPrice = data.price_usd;
-        var tx = new PortfolioItem(symbol, date, quantity, price, mktPrice);
-        addTx(tx);
-        renderFolio(portfolio, prices);
-    });
-
-    updatePriceFor(symbol);
-    autoSave();
-
-    renderFolio(portfolio, prices);
-
-    // var snackbarContainer = document.querySelector('#demo-snackbar-example');
-    // snackbarContainer.MaterialSnackbar.showSnackbar(symbol + " added to your portfolio");
 }
 
 var actionHandlersInited = false;
@@ -329,7 +132,7 @@ function addActionHandlers() {
 		submitChangeUserForm();
             });
 	}
-	
+
 
 	dialog.addEventListener('keydown', function(e) {
             if (e.which === 13 || e.keyCode === 13) {
@@ -400,7 +203,7 @@ function init() {
 
         updatePrices();
         addActionHandlers();
-        renderFolio(portfolio, prices);
+        renderFolio(prices);
         setClock();
 
         if (USER_ID === 'minky') {
