@@ -23,6 +23,7 @@
 
 .tx_select {
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .tx_select .tx_selector {
@@ -115,7 +116,7 @@ header .mdl-layout__header-row {
     line-height: 39px;
 }
 
-.total_pl_text {
+.total_pl_text, .total_rpl_text {
     display: inline-block;
     vertical-align: middle;
     height: 32px;

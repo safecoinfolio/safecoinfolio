@@ -222,7 +222,7 @@ function getTotals() {
     TXNS.forEach(function(t) {
         if (prices[t.sym] && prices[t.sym].length > 1) {
             total += t.q * prices[t.sym][1];
-            if (t.q > 0) running_pl += (t.q * prices[t.sym][1]) - t.cost;
+            running_pl += (t.q * prices[t.sym][1]) - t.cost;
             if (t.q < 0) realised_pl += (t.pl());
         }
     });
@@ -231,25 +231,28 @@ function getTotals() {
 }
 
 function updateTotal(prices) {
-    var total = 0;
-    var total_pl = 0;
+    var totals = getTotals();
+    var total = totals[0];
+    var running_pl = totals[1];
+    var realized_pl = totals[2];
 
-    TXNS.forEach(function(t) {
-        if (prices[t.sym] && prices[t.sym].length > 1) {
-            total += t.q * prices[t.sym][1];
-            total_pl += (t.q * prices[t.sym][1]) - t.cost;
-        }
-    });
-
-    var pl_class = total_pl >= 0 ? 'profit' : 'loss';
+    var pl_class = running_pl >= 0 ? 'profit' : 'loss';
 
     var total_usd_el = document.querySelector('.total_usd');
     if (total_usd_el) total_usd_el.innerHTML = round(total);
     var total_pl_el = document.querySelector('.total_pl');
     if (total_pl_el) {
-       total_pl_el.innerHTML = round(total_pl);
+       total_pl_el.innerHTML = round(running_pl);
        total_pl_el.classList.remove('profit');
        total_pl_el.classList.remove('loss');
        total_pl_el.classList.add(pl_class);
+    }
+    var total_rpl_el = document.querySelector('.total_rpl');
+    if (total_rpl_el) {
+        var rpl_class = realized_pl >= 0 ? 'profit' : 'loss';
+        total_rpl_el.innerHTML = round(realized_pl);
+        total_rpl_el.classList.remove('profit');
+        total_rpl_el.classList.remove('loss');
+        total_rpl_el.classList.add(rpl_class);
     }
 }
