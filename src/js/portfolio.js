@@ -51,7 +51,6 @@ function getAggregateFolio(txns, prices) {
        var txn = txns[tx];
        if (aggregates[txn.sym]) {
            var a = aggregates[txn.sym];
-           var newAvg = ((a.q * a.avg) + (txn.cost)) / (a.q + txn.q);
            a.q = parseFloat(a.q) + parseFloat(txn.q);
            var mktPrice = prices[txn.sym] && prices[txn.sym].length > 1 ? prices[txn.sym][1] : 0;
            a.total = a.q * mktPrice;
@@ -193,6 +192,28 @@ function renderFolio(prices) {
     if (table) table.innerHTML = html;
 
     updateTotal(prices);
+}
+
+/**
+ * @return an array of 3 elements:
+ *             1) total USD value of the portfolio
+               2) running PL
+               3) realised PL
+ */
+function getTotals() {
+    var total = 0;
+    var running_pl = 0;
+    var realised_pl = 0;
+
+    TXNS.forEach(function(t) {
+        if (prices[t.sym] && prices[t.sym].length > 1) {
+            total += t.q * prices[t.sym][1];
+            if (t.q > 0) running_pl += (t.q * prices[t.sym][1]) - t.cost;
+            if (t.q < 0) realised_pl += (t.pl());
+        }
+    });
+
+    return [total, running_pl, realised_pl];
 }
 
 function updateTotal(prices) {
