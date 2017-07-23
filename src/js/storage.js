@@ -22,4 +22,5 @@ function autoSave() {
     //save('portfolio', portfolio);
     save('prices', prices);
     save('txns', TXNS);
+    save('checkpoints', CHECKPOINTS);
 }

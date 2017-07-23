@@ -108,6 +108,16 @@ function addActionHandlers() {
         if (e.target.classList.contains('txn-delete')) {
             return deleteTxn(e.target.dataset.id);
         }
+        if (e.target.classList.contains('tx_selector')) {
+            document.querySelector('.tx_selector.active').classList.remove('active');
+            e.target.classList.add('active');
+            if (e.target.classList.contains('tx_buy')) {
+                document.querySelector('.tx-add-price').hidden = false;
+            } else {
+                document.querySelector('.tx-add-price').hidden = true;
+            }
+            return;
+        }
 
     }, { passive: true, capture: true });
 
@@ -153,6 +163,7 @@ function setClock() {
 
     setInterval(updatePrices, 300000);
     setInterval(autoSave, 10000);
+    //setInterval(function() { addCheckPoint() }, 1000 * 60 * 15);
     //setInterval(function() { renderFolio(portfolio, prices) }, 120000);
     clockInited = true;
 }
@@ -194,6 +205,12 @@ function init() {
             TXNS = TXNS.map(function(tx) { return Object.assign(new PortfolioItem, tx)});
         } else {
             TXNS = [];
+        }
+
+        if (load('checkpoints') !== null) {
+            CHECKPOINTS = load('checkpoints');
+            var sums = getTotals();
+            addCheckPoint(sums[0], sums[1], sums[2]);
         }
 
         migrate();

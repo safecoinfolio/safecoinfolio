@@ -72,10 +72,18 @@
 
               <div class="mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title mdl-card--expand">
-                  <h2 class="mdl-card__title-text">Add coin</h2>
+                  <h2 class="mdl-card__title-text">Add transactions</h2>
                 </div>
 
                 <div class="mdl-card__supporting-text">
+                  <div class="tx_select">
+                      <div class="tx_buy tx_selector active">
+                          Buy
+                      </div>
+                      <div class="tx_sell tx_selector">
+                          Sell
+                      </div>
+                  </div>
                   <form class="add-symbol-form" action="#">
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                       <input class="mdl-textfield__input" type="text" id="symbol" name="symbol">
@@ -91,7 +99,7 @@
         <input class="mdl-textfield__input" type="date" id="date" name="date">
         <label class="mdl-textfield__label" for="date">Date</label>
     </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label tx-add-price">
         <input class="mdl-textfield__input" type="number" step="0.01" id="p" name="p">
         <label class="mdl-textfield__label" for="p">Price per unit (USD)</label>
     </div>

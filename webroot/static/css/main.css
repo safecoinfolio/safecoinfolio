@@ -21,6 +21,29 @@
   background: #5E239D;
 }
 
+.tx_select {
+    cursor: pointer;
+}
+
+.tx_select .tx_selector {
+    padding: 5px;
+    width: 45%;
+    float: left;
+}
+
+.tx_select .active {
+    background: #5E239D;
+    color: white;
+}
+
+.tx_buy {
+
+}
+
+.tx_sell {
+
+}
+
 .loss {
     color: #b21338;
 }

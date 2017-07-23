@@ -54,7 +54,7 @@ function getTxnRowHtml(txn) {
     var pl_class = pl >= 0 ? 'profit' : 'loss';
     return '<td>' + txn.date + '</td>\
             <td>' + round(txn.q) + '</td>\
-            <td>' + round(txn.cost / txn.q) + '</td>\
+            <td>' + Math.abs(round(txn.cost / txn.q)) + '</td>\
             <td></td>\
             <td></td>\
             <td class="' + pl_class + '">' + round(pl) + '</td>\

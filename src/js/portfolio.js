@@ -25,7 +25,7 @@ PortfolioItem.prototype.isPurchase = function() {
 }
 
 PortfolioItem.prototype.pl = function() {
-  return this.total - this.cost;
+  return this.isPurchase() ? this.total - this.cost : -1 * (this.total - this.cost);
 }
 
 function getPortfolio(instruments, prices) {
@@ -84,15 +84,29 @@ function getAggregateFolio(txns, prices) {
 
 function addSymbol(event) {
     event.preventDefault();
+    var isBuy = document.querySelector('.tx_selector.active').classList.contains('tx_buy');
     var form = document.querySelector('.add-symbol-form');
     var symbol = form.querySelector('input[name=symbol]').value.toLowerCase();
-    var quantity = form.querySelector('input[name=q]').value;
+    var quantity = Math.abs(parseFloat(form.querySelector('input[name=q]').value));
     var date = form.querySelector('input[name=date]').value;
-    var price = form.querySelector('input[name=p]').value;
+    var price = parseFloat(form.querySelector('input[name=p]').value);
+
+    if (!isBuy) {
+        // selling from a bag of coins,
+        // the cost is the average price for that coins
+        var agg = getAggregateFolio(TXNS, prices);
+        agg.forEach(function(c) {
+            if (c.sym === symbol) {
+                price = c.avg;
+            }
+        });
+
+        quantity = -1 * quantity;
+    }
 
     // fetch price and add transaction
     updatePriceFor(symbol, function(data) {
-        var mktPrice = data.price_usd;
+        var mktPrice = parseFloat(data.price_usd);
         var tx = new PortfolioItem(symbol, date, quantity, price, mktPrice);
         addTx(tx);
         renderFolio(prices);
